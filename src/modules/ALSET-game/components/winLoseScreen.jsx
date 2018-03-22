@@ -35,48 +35,50 @@ class WinLoseScreen extends Component {
   }
 
   checkScore() {
-   let playerScores=
-     {  player1Score:this.props.store.score[0],
-        player2Score:this.props.store.score[1]
-     };
+    let playerScores = {
+      player1Score: this.props.store.score[0],
+      player2Score: this.props.store.score[1],
+    };
 
     this.props.onScoreUpdate(playerScores);
 
     if (this.props.store.score[0] >= this.gatherToWin) {
       this.winText = 'Player 1 Wins!!!';
-      this.props.onWin(0);
+      this.props.onWin({ winner: 0 });
       return true;
-    }else if (this.props.store.score[1] >= this.gatherToWin) {
+    } else if (this.props.store.score[1] >= this.gatherToWin) {
       this.winText = 'Player 2 Wins!!!';
-      this.props.onWin(1);
+      this.props.onWin({ winner: 1 });
       return true;
-    }else{
+    } else {
       return false;
     }
   }
 
-
   render() {
     return (
       <div>
-      { this.checkScore() &&
-        <div className='winLose-wrapper'>
-        <h1 style={{ textAlign: 'center', marginTop: '20%', color: '#fff' }}>{this.winText}</h1>
-        <button className='winLose-screen'
-          onClick={() => {
-            this.props.store.mode = 'restart';
-            this.props.store.score = [0, 0];
-            setTimeout(() => {
-              this.props.store.mode = 'play';
-            }, 1000);
-          }}
-        >
-          Restart Game
-        </button>
+        {this.checkScore() && (
+          <div className="winLose-wrapper">
+            <h1 style={{ textAlign: 'center', marginTop: '20%', color: '#fff' }}>{this.winText}</h1>
+            <button
+              className="winLose-screen"
+              onClick={() => {
+                this.props.store.mode = 'restart';
+                this.props.onGameEvent({
+                  type: 'restart',
+                });
+                this.props.store.score = [0, 0];
+                setTimeout(() => {
+                  this.props.store.mode = 'play';
+                }, 1000);
+              }}
+            >
+              Restart Game
+            </button>
+          </div>
+        )}
       </div>
-      }
-      </div>
-      
     );
   }
 }

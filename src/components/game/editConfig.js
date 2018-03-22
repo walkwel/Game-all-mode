@@ -12,7 +12,7 @@ import AceEditor from 'react-ace';
 import 'brace/mode/json';
 import 'brace/theme/github';
 
-import Config from '../config';
+import gameConfig from '../../gameConfig';
 
 const styles = theme => ({
   root: {
@@ -28,7 +28,7 @@ class EditConfig extends Component {
   constructor() {
     super();
     this.state = {
-      config: Config,
+      config: gameConfig,
       errors: [],
     };
     this.handleChange = this.handleChange.bind(this);

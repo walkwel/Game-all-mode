@@ -7,8 +7,10 @@ import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 
-import Game from '../game';
-import CustomFunctionCode from '../customCode';
+import Game from '../../modules/ALSET-game';
+import Header from '../header';
+
+import CustomFunctionCode from '../../customCode';
 
 import brace from 'brace';
 import AceEditor from 'react-ace';
@@ -42,13 +44,48 @@ class PlayGame extends Component {
       timestamp: 0,
       timing: 1000,
       errors: [],
+      showMode: true,
+      showScore: true,
+      scores: { player1Score: 0, player2Score: 0 },
+      winner: null,
+      playGame: null,
     };
     this.getCommands = this.getCommands.bind(this);
     this.getPlayersCommands = this.getPlayersCommands.bind(this);
     this.updateCustomCode = this.updateCustomCode.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleValidation = this.handleValidation.bind(this);
+
+    this.onScoreUpdate = this.onScoreUpdate.bind(this);
+    this.onWin = this.onWin.bind(this);
+    // this.onPlay = this.onPlay.bind(this);
+    // this.onPause = this.onPause.bind(this);
+    this.toggleScore = this.toggleScore.bind(this);
+    this.toggleMode = this.toggleMode.bind(this);
   }
+
+  onScoreUpdate(playerScores) {
+    if (
+      playerScores.player1Score === this.state.scores.player1Score &&
+      playerScores.player2Score === this.state.scores.player2Score
+    ) {
+      return;
+    }
+    console.log('geting name & score', playerScores);
+    this.setState({ scores: playerScores });
+  }
+  onWin(winner) {
+    console.log('Winner..', winner);
+    // this.setState({winner : winner});
+  }
+
+  toggleMode() {
+    this.setState({ showMode: !this.state.showMode });
+  }
+  toggleScore() {
+    this.setState({ showScore: !this.state.showScore });
+  }
+
   getCommands(world, playerNum) {
     //var player = world.bodies.find(body=>{if(body.label=="character"&&body.customId==playerNum-1) return body;});
     var player = world.players[playerNum - 1];
@@ -104,6 +141,9 @@ class PlayGame extends Component {
       alert('Invalid code,please correct thr code');
       return;
     }
+    this.props.onGameEvent({
+      type: 'code_updated',
+    });
     this.setState({ customFunctionCode: this.state.updatedCode });
   }
   handleChange(newCode) {
@@ -115,7 +155,15 @@ class PlayGame extends Component {
   }
   render() {
     const { classes } = this.props;
-    const { updatedCode, timestamp, timing } = this.state;
+    const { updatedCode, timestamp, timing, showMode, scores, showScore, winner, playGame } = this.state;
+    const header = (
+      <Header
+        scores={scores}
+        toggleScore={() => this.toggleScore()}
+        toggleMode={() => this.toggleMode()}
+        gameMode={this.props.gameMode}
+      />
+    );
     const functionEditor = (
       <div>
         <h4>{'function getPlayersCommands(world, playerNum){'}</h4>
@@ -145,64 +193,56 @@ class PlayGame extends Component {
         </Button>
       </div>
     );
-
     const gamePvsP = (
       <Game
-        gameId={this.props.gameId}
-        showMode={this.props.showMode}
-        showScore={this.props.showScore}
-        onScoreUpdate={this.props.onScoreUpdate}
-        onWin={this.props.onWin}
-        play={this.props.play}
-        onPause={this.props.onPause}
-        control={this.props.control}
+        gameId={this.props.gameMode.id}
+        showMode={showMode}
+        showScore={showScore}
+        onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
+        onWin={winner => this.onWin(winner)}
+        onGameEvent={this.props.onGameEvent}
       />
     );
     const gamePvsB = (
       <Game
-        gameId={this.props.gameId}
-        showMode={this.props.showMode}
-        showScore={this.props.showScore}
-        onScoreUpdate={this.props.onScoreUpdate}
-        onWin={this.props.onWin}
-        play={this.props.play}
-        onPause={this.props.onPause}
-        control={this.props.control}
+        gameId={this.props.gameMode.id}
+        showMode={showMode}
+        showScore={showScore}
+        onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
+        onWin={winner => this.onWin(winner)}
+        onGameEvent={this.props.onGameEvent}
         player2={world => this.getCommands(world, 2)}
         config={{ speed: 10, minGems: 20, maxGems: 30, gatherToWin: 30 }}
       />
     );
     const gameBvsB = (
       <Game
-        gameId={this.props.gameId}
-        showMode={this.props.showMode}
-        showScore={this.props.showScore}
-        onScoreUpdate={this.props.onScoreUpdate}
-        onWin={this.props.onWin}
-        play={this.props.play}
-        onPause={this.props.onPause}
-        control={this.props.control}
+        gameId={this.props.gameMode.id}
+        showMode={showMode}
+        showScore={showScore}
+        onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
+        onWin={winner => this.onWin(winner)}
+        onGameEvent={this.props.onGameEvent}
         player1={world => this.getCommands(world, 1)}
         player2={world => this.getCommands(world, 2)}
       />
     );
     const gameBvsCF = (
       <Game
-        gameId={this.props.gameId}
-        showMode={this.props.showMode}
-        showScore={this.props.showScore}
-        onScoreUpdate={this.props.onScoreUpdate}
-        onWin={this.props.onWin}
-        play={this.props.play}
-        onPause={this.props.onPause}
-        control={this.props.control}
+        gameId={this.props.gameMode.id}
+        showMode={showMode}
+        showScore={showScore}
+        onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
+        onWin={winner => this.onWin(winner)}
+        onGameEvent={this.props.onGameEvent}
         player1={world => this.getPlayersCommands(world, 1)}
         player2={world => this.getCommands(world, 2)}
       />
     );
-    const gameId = this.props.gameId;
+    const gameId = this.props.gameMode.id;
     return (
       <div>
+        {header}
         {gameId === 0 && gamePvsP}
         {gameId === 1 && gamePvsB}
         {gameId === 2 && gameBvsB}

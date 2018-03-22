@@ -15,19 +15,20 @@ class Controls extends Component {
   }
 
   render() {
-    const { play, onPause } = this.props
     return (
-      <div className='controls-wraper'>
+      <div className="controls-wraper">
         <div
           onClick={() => {
             this.props.store.mode = 'restart';
             this.props.store.score = [0, 0];
+            this.props.onGameEvent({
+              type: 'restart',
+            });
             setTimeout(() => {
               this.props.store.mode = 'play';
-              this.props.store.mode = play;
             }, 1000);
           }}
-         className='controls-wraper-child'
+          className="controls-wraper-child"
         >
           {'restart'}
         </div>
@@ -35,9 +36,11 @@ class Controls extends Component {
           <div
             onClick={() => {
               this.props.store.mode = 'pause';
-              onPause('pause')
+              this.props.onGameEvent({
+                type: 'pause',
+              });
             }}
-            className='controls-wraper-child'
+            className="controls-wraper-child"
           >
             {'pause'}
           </div>
@@ -45,9 +48,11 @@ class Controls extends Component {
           <div
             onClick={() => {
               this.props.store.mode = 'play';
-              this.props.store.mode = play;
+              this.props.onGameEvent({
+                type: 'resume',
+              });
             }}
-            className='controls-wraper-child'
+            className="controls-wraper-child"
           >
             {'resume'}
           </div>
