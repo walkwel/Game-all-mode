@@ -84,8 +84,8 @@ class Module extends Component {
     return (
       <div>
         {activePageNum === 0 && selectGame}
-        {activePageNum === 1 && selectMode}
-        {activePageNum === 2 && editConfig}
+        {activePageNum === 1 && editConfig}
+        {activePageNum === 2 && selectMode}
         {activePageNum === 3 && playGame}
         {activePageNum > 0 && backButton}
       </div>
