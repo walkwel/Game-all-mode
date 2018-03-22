@@ -38,7 +38,7 @@ class SelectGame extends Component {
     const gameTypes = [
       {
         id: 0,
-        name: 'Gem',
+        name: 'Gem Collector',
       },
       {
         id: 1,

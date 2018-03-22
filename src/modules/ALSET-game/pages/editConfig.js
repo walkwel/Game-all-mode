@@ -9,10 +9,10 @@ import Button from 'material-ui/Button';
 import brace from 'brace';
 import AceEditor from 'react-ace';
 
-import Config from '../config';
-
 import 'brace/mode/json';
 import 'brace/theme/github';
+
+import Config from '../config';
 
 const styles = theme => ({
   root: {
@@ -38,7 +38,8 @@ class EditConfig extends Component {
   handleChange(newConfig) {
     this.setState({ config: newConfig });
   }
-  handleValidation(errors) {
+  handleValidation(messages) {
+    const errors = messages.filter(msg => (msg.type === 'error' ? true : false));
     this.setState({ errors: errors });
   }
   handleSave() {
@@ -58,7 +59,7 @@ class EditConfig extends Component {
           mode="json"
           theme="github"
           name="configEditor"
-          // onLoad={this.onLoad}
+          width={'100%'}
           onChange={this.handleChange}
           onValidate={this.handleValidation}
           fontSize={14}

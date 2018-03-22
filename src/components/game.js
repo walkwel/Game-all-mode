@@ -52,7 +52,7 @@ class Game extends Component {
   render() {
     const { showMode, scores, showScore, winner, playGame } = this.state;
     return (
-      <div style={{ height: '600px', width: '100%' }}>
+      <div>
         <Header
           scores={scores}
           toggleScore={() => this.toggleScore()}
@@ -61,8 +61,6 @@ class Game extends Component {
           onPlay={() => this.onPlay()}
         />
         <ALSET_Game
-          key={0}
-          gameId={0}
           showMode={showMode}
           showScore={showScore}
           onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}

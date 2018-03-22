@@ -1,154 +1,220 @@
 import React, { Component } from 'react';
-
-import { Loop, Stage, World, KeyListener } from 'react-game-kit';
-import Matter from 'matter-js';
-import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 
-// components
-import Background from '../components/background.jsx';
-import Character from '../components/character.jsx';
-import Stone from '../components/stone.jsx';
-import Grass from '../components/grass.jsx';
-import Score from '../components/score.jsx';
-import Info from '../components/info.jsx';
-import Controls from '../components/controls.jsx';
-import WinLoseScreen from '../components/winLoseScreen.jsx';
-// stores
-import GameStore1 from '../store/game-store1.jsx';
-import GameStore2 from '../store/game-store2.jsx';
-import GameStore3 from '../store/game-store3.jsx';
-import GameStore4 from '../store/game-store4.jsx';
+import { withStyles } from 'material-ui/styles';
+import Grid from 'material-ui/Grid';
+import Paper from 'material-ui/Paper';
+import Button from 'material-ui/Button';
+import Typography from 'material-ui/Typography';
 
-//import images
-import CharacterBlonde from '../assets/character-blonde.png';
-import CharacterBrunette from '../assets/character-brunette.png';
-import '../style.css';
+import Game from '../game';
+import CustomFunctionCode from '../customCode';
 
-class Game extends Component {
-  constructor(props) {
-    super(props);
-    let GameStore;
-    if (this.props.gameId === 0) GameStore = GameStore1;
-    else if (this.props.gameId === 1) GameStore = GameStore2;
-    else if (this.props.gameId === 2) GameStore = GameStore3;
-    else if (this.props.gameId === 3) GameStore = GameStore4;
-    if (props.player1) this.keyListener1 = { status: false };
-    else this.keyListener1 = new KeyListener();
-    if (props.player2) this.keyListener2 = { status: false };
-    else this.keyListener2 = new KeyListener();
-    this.updateHandler = this.updateHandler.bind(this);
+import brace from 'brace';
+import AceEditor from 'react-ace';
+import 'brace/mode/javascript';
+import 'brace/theme/github';
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    padding: '0px 10px',
+  },
+  paper: {
+    textAlign: 'center',
+    padding: '40px 20px',
+    cursor: 'pointer',
+  },
+  control: {
+    padding: theme.spacing.unit * 2,
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+});
+
+class PlayGame extends Component {
+  constructor() {
+    super();
+    this.state = {
+      customFunctionCode: CustomFunctionCode,
+      updatedCode: CustomFunctionCode,
+      timestamp: 0,
+      timing: 1000,
+      errors: [],
+    };
+    this.getCommands = this.getCommands.bind(this);
+    this.getPlayersCommands = this.getPlayersCommands.bind(this);
+    this.updateCustomCode = this.updateCustomCode.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleValidation = this.handleValidation.bind(this);
   }
-
-  componentDidMount() {
-    if (this.keyListener1 && this.keyListener1.status !== false)
-      this.keyListener1.subscribe([
-        this.keyListener1.LEFT,
-        this.keyListener1.RIGHT,
-        this.keyListener1.UP,
-        this.keyListener1.DOWN,
-      ]);
-    if (this.keyListener2 && this.keyListener2.status !== false) this.keyListener2.subscribe([73, 74, 75, 76]);
+  getCommands(world, playerNum) {
+    //var player = world.bodies.find(body=>{if(body.label=="character"&&body.customId==playerNum-1) return body;});
+    var player = world.players[playerNum - 1];
+    var closestGem = false;
+    var closest;
+    world.stones.forEach(stone => {
+      if (closestGem == false) closestGem = stone;
+      else if (
+        Math.abs(
+          Math.sqrt(closestGem.x * closestGem.x + closestGem.y * closestGem.y) -
+            Math.sqrt(player.x * player.x + player.y * player.y),
+        ) >
+        Math.abs(
+          Math.sqrt(stone.x * stone.x + stone.y * stone.y) - Math.sqrt(player.x * player.x + player.y * player.y),
+        )
+      ) {
+        closestGem = stone;
+      }
+    });
+    if (closestGem) {
+      if (closestGem.x - player.x > 10) {
+        var direction = { left: false, right: true, up: false, down: false };
+      } else if (closestGem.x - player.x < -10) {
+        var direction = { left: true, right: false, up: false, down: false };
+      } else if (closestGem.y - player.y > 10) {
+        var direction = { left: false, right: false, up: false, down: true };
+      } else if (closestGem.y - player.y < -10) {
+        var direction = { left: false, right: false, up: true, down: false };
+      }
+      return direction;
+    } else if (Date.now() - this.state.timestamp >= this.state.timing) {
+      var newState = Math.floor(Math.random() * (11 - 8 + 1) + 8);
+      this.state.timestamp = Date.now();
+      if (newState == 11) var direction = { left: false, right: true, up: false, down: false };
+      else if (newState == 10) var direction = { left: false, right: false, up: false, down: true };
+      else if (newState == 9) var direction = { left: true, right: false, up: false, down: false };
+      else if (newState == 8) var direction = { left: false, right: false, up: true, down: false };
+      return direction;
+    }
   }
-
-  componentWillUnmount() {
-    if (this.keyListener1) this.keyListener1.unsubscribe();
-    if (this.keyListener2) this.keyListener2.unsubscribe();
+  getPlayersCommands(world, playerNum) {
+    try {
+      var expression = this.state.customFunctionCode;
+      var result = eval('(function() {' + expression + '}())');
+      return result;
+    } catch (err) {
+      //console.log(err);
+    }
   }
-  componentWillReceiveProps(nextProps) {}
+  updateCustomCode() {
+    if (this.state.errors.length > 0) {
+      console.log(this.state.errors);
+      alert('Invalid code,please correct thr code');
+      return;
+    }
+    this.setState({ customFunctionCode: this.state.updatedCode });
+  }
+  handleChange(newCode) {
+    this.setState({ updatedCode: newCode });
+  }
+  handleValidation(messages) {
+    const errors = messages.filter(msg => (msg.type === 'error' ? true : false));
+    this.setState({ errors: errors });
+  }
   render() {
-    let GameStore;
-    if (this.props.gameId === 0) GameStore = GameStore1;
-    else if (this.props.gameId === 1) GameStore = GameStore2;
-    else if (this.props.gameId === 2) GameStore = GameStore3;
-    else if (this.props.gameId === 3) GameStore = GameStore4;
-    if (this.props.config) GameStore.config = this.props.config;
-    const { showScore = true, showMode = true, onScoreUpdate, onWin, play, onPause, control } = this.props;
+    const { classes } = this.props;
+    const { updatedCode, timestamp, timing } = this.state;
+    const functionEditor = (
+      <div>
+        <h4>{'function getPlayersCommands(world, playerNum){'}</h4>
+        <AceEditor
+          mode="javascript"
+          theme="github"
+          name="customFunctionCodeEditor"
+          width={'100%'}
+          onChange={this.handleChange}
+          onValidate={this.handleValidation}
+          fontSize={14}
+          showPrintMargin={true}
+          showGutter={true}
+          highlightActiveLine={true}
+          value={updatedCode}
+          setOptions={{
+            enableBasicAutocompletion: false,
+            enableLiveAutocompletion: false,
+            enableSnippets: false,
+            showLineNumbers: true,
+            tabSize: 2,
+          }}
+        />
+        <h4>{'}'}</h4>
+        <Button variant="raised" color="primary" onClick={this.updateCustomCode} className={classes.button}>
+          Update code
+        </Button>
+      </div>
+    );
+
+    const gamePvsP = (
+      <Game
+        gameId={this.props.gameId}
+        showMode={this.props.showMode}
+        showScore={this.props.showScore}
+        onScoreUpdate={this.props.onScoreUpdate}
+        onWin={this.props.onWin}
+        play={this.props.play}
+        onPause={this.props.onPause}
+        control={this.props.control}
+      />
+    );
+    const gamePvsB = (
+      <Game
+        gameId={this.props.gameId}
+        showMode={this.props.showMode}
+        showScore={this.props.showScore}
+        onScoreUpdate={this.props.onScoreUpdate}
+        onWin={this.props.onWin}
+        play={this.props.play}
+        onPause={this.props.onPause}
+        control={this.props.control}
+        player2={world => this.getCommands(world, 2)}
+        config={{ speed: 10, minGems: 20, maxGems: 30, gatherToWin: 30 }}
+      />
+    );
+    const gameBvsB = (
+      <Game
+        gameId={this.props.gameId}
+        showMode={this.props.showMode}
+        showScore={this.props.showScore}
+        onScoreUpdate={this.props.onScoreUpdate}
+        onWin={this.props.onWin}
+        play={this.props.play}
+        onPause={this.props.onPause}
+        control={this.props.control}
+        player1={world => this.getCommands(world, 1)}
+        player2={world => this.getCommands(world, 2)}
+      />
+    );
+    const gameBvsCF = (
+      <Game
+        gameId={this.props.gameId}
+        showMode={this.props.showMode}
+        showScore={this.props.showScore}
+        onScoreUpdate={this.props.onScoreUpdate}
+        onWin={this.props.onWin}
+        play={this.props.play}
+        onPause={this.props.onPause}
+        control={this.props.control}
+        player1={world => this.getPlayersCommands(world, 1)}
+        player2={world => this.getCommands(world, 2)}
+      />
+    );
+    const gameId = this.props.gameId;
     return (
-      <div style={{ height: '600px', width: '100%' }}>
-        <Loop>
-          <Stage className="index-bg-color">
-            <World
-              onUpdate={this.updateHandler}
-              onInit={this.physicsInit}
-              onCollision={this.colissionHandler}
-              gravity={{
-                x: 0,
-                y: 0,
-                scale: 0.001,
-              }}
-            >
-              <Grass />
-              <Character
-                keys={this.keyListener1}
-                store={GameStore}
-                imgSrc={CharacterBlonde}
-                key={0}
-                index={0}
-                gameId={this.props.gameId}
-              />
-              <Character
-                keys={this.keyListener2}
-                store={GameStore}
-                imgSrc={CharacterBrunette}
-                key={1}
-                index={1}
-                gameId={this.props.gameId}
-              />
-              {GameStore.stonesData.map((stone, index) => {
-                return <Stone store={GameStore} gameId={this.props.gameId} key={index} index={index} />;
-              })}
-              {showScore && <Score store={GameStore} left={'0'} right={'none'} playerId={0} />}
-              {showScore && <Score store={GameStore} left={'none'} right={'0'} playerId={1} />}
-              {showMode && <Info gameId={this.props.gameId} />}
-              <Controls store={GameStore} play={play} onPause={playEvent => onPause(playEvent)} />
-              <WinLoseScreen
-                store={GameStore}
-                onScoreUpdate={playerScores => onScoreUpdate(playerScores)}
-                onWin={winner => onWin(winner)}
-              />
-            </World>
-          </Stage>
-        </Loop>
+      <div>
+        {gameId === 0 && gamePvsP}
+        {gameId === 1 && gamePvsB}
+        {gameId === 2 && gameBvsB}
+        {gameId === 3 && gameBvsCF}
+        {this.props.gameId === 3 && functionEditor}
       </div>
     );
   }
-  physicsInit(engine) {}
-  colissionHandler(engine) {}
-  updateHandler(engine) {
-    let player1Direction;
-    let player2Direction;
-    let GameStore;
-    if (this.props.gameId === 0) GameStore = GameStore1;
-    else if (this.props.gameId === 1) GameStore = GameStore2;
-    else if (this.props.gameId === 2) GameStore = GameStore3;
-    else if (this.props.gameId === 3) GameStore = GameStore4;
-    if (GameStore.mode === 'pause') return;
-    let WorldData = {
-      players: GameStore.characterPosition,
-      stones: GameStore.stonesData,
-    };
-    if (this.props.player1) player1Direction = this.props.player1(WorldData);
-    if (this.props.player2) player2Direction = this.props.player2(WorldData);
-    if (player1Direction) {
-      if (player1Direction.left) GameStore.characterState[0] = 9;
-      else if (player1Direction.right) GameStore.characterState[0] = 11;
-      else if (player1Direction.up) GameStore.characterState[0] = 8;
-      else if (player1Direction.down) GameStore.characterState[0] = 10;
-    }
-    if (player2Direction) {
-      if (player2Direction.left) GameStore.characterState[1] = 9;
-      else if (player2Direction.right) GameStore.characterState[1] = 11;
-      else if (player2Direction.up) GameStore.characterState[1] = 8;
-      else if (player2Direction.down) GameStore.characterState[1] = 10;
-    }
-    GameStore.createNewStones();
-  }
 }
-Game.propTypes = {
-  showScore: PropTypes.bool.isRequired,
-  showMode: PropTypes.bool.isRequired,
-  onScoreUpdate: PropTypes.func.isRequired,
+
+PlayGame.propTypes = {
+  classes: PropTypes.object.isRequired,
 };
 
-export default observer(Game);
+export default withStyles(styles)(PlayGame);

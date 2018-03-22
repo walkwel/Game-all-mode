@@ -36,10 +36,6 @@ class Module extends Component {
           alert('Sorry ! Sqaud game is currently unavailable.');
           return;
         }
-        if (stateKey === 'gameMode' && stateValue !== 0) {
-          alert('Sorry ! Only Player-vs-Player mode is available');
-          return;
-        }
 
         this.setState({ [stateKey]: stateValue });
       }
@@ -57,13 +53,13 @@ class Module extends Component {
   }
   render() {
     const { classes } = this.props;
-    const { activePageNum } = this.state;
+    const { activePageNum, gameMode } = this.state;
     const selectGame = <SelectGame nextPage={(key, value) => this.nextPage(key, value)} />;
     const editConfig = <EditConfig nextPage={(key, value) => this.nextPage(key, value)} />;
     const selectMode = <SelectMode nextPage={(key, value) => this.nextPage(key, value)} />;
     const playGame = (
       <PlayGame
-        gameId={this.props.gameId}
+        gameId={gameMode}
         showMode={this.props.showMode}
         showScore={this.props.showScore}
         onScoreUpdate={this.props.onScoreUpdate}
