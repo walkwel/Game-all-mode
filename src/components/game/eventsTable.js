@@ -47,7 +47,7 @@ class EventsTable extends Component {
                         <TableCell numeric>{index + 1}</TableCell>
                         <TableCell>{event.type}</TableCell>
                         <TableCell>{event.gameMode.name}</TableCell>
-                        <TableCell>{moment(event.timeStamp).format('LTS')}</TableCell>
+                        <TableCell>{event.timeStamp}</TableCell>
                       </TableRow>
                     );
                   })}
