@@ -247,7 +247,7 @@ class PlayGame extends Component {
         {gameId === 1 && gamePvsB}
         {gameId === 2 && gameBvsB}
         {gameId === 3 && gameBvsCF}
-        {this.props.gameId === 3 && functionEditor}
+        {gameId === 3 && functionEditor}
       </div>
     );
   }
