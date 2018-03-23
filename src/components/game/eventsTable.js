@@ -36,6 +36,7 @@ class EventsTable extends Component {
                   <TableRow>
                     <TableCell numeric>Sr No.</TableCell>
                     <TableCell>Event Type</TableCell>
+                    <TableCell>Game</TableCell>
                     <TableCell>Game Mode</TableCell>
                     <TableCell>Time</TableCell>
                   </TableRow>
@@ -46,7 +47,8 @@ class EventsTable extends Component {
                       <TableRow key={index}>
                         <TableCell numeric>{index + 1}</TableCell>
                         <TableCell>{event.type}</TableCell>
-                        <TableCell>{event.gameMode.name}</TableCell>
+                        <TableCell>{event.gameType === 0 ? 'Gem Collector' : 'Sqaud'}</TableCell>
+                        <TableCell>{event.gameMode ? event.gameMode.name : '__'}</TableCell>
                         <TableCell>{event.timeStamp}</TableCell>
                       </TableRow>
                     );

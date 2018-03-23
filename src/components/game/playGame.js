@@ -7,7 +7,7 @@ import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 
-import Game from '../../modules/ALSET-game';
+import GemCollectorGame from '../../modules/ALSET-game';
 import Header from '../header';
 
 import CustomFunctionCode from '../../customCode';
@@ -153,6 +153,7 @@ class PlayGame extends Component {
     const errors = messages.filter(msg => (msg.type === 'error' ? true : false));
     this.setState({ errors: errors });
   }
+
   render() {
     const { classes } = this.props;
     const { updatedCode, timestamp, timing, showMode, scores, showScore, winner, playGame } = this.state;
@@ -164,7 +165,84 @@ class PlayGame extends Component {
         gameMode={this.props.gameMode}
       />
     );
-    const functionEditor = (
+
+    const gameId = this.props.gameMode.id;
+    return (
+      <div>
+        {header}
+        {this.initGemCollector(gameId)}
+        {gameId === 3 && this.initFunctionEditor()}
+      </div>
+    );
+  }
+
+  initGemCollector = gameId => {
+    const { classes } = this.props;
+    const { updatedCode, timestamp, timing, showMode, scores, showScore, winner, playGame } = this.state;
+    switch (gameId) {
+      case 0: {
+        return (
+          <GemCollectorGame
+            gameId={this.props.gameMode.id}
+            showMode={showMode}
+            showScore={showScore}
+            onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
+            onWin={winner => this.onWin(winner)}
+            onGameEvent={this.props.onGameEvent}
+          />
+        );
+      }
+      case 1: {
+        return (
+          <GemCollectorGame
+            gameId={this.props.gameMode.id}
+            showMode={showMode}
+            showScore={showScore}
+            onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
+            onWin={winner => this.onWin(winner)}
+            onGameEvent={this.props.onGameEvent}
+            player2={world => this.getCommands(world, 2)}
+            config={{ speed: 10, minGems: 20, maxGems: 30, gatherToWin: 30 }}
+          />
+        );
+      }
+      case 2: {
+        return (
+          <GemCollectorGame
+            gameId={this.props.gameMode.id}
+            showMode={showMode}
+            showScore={showScore}
+            onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
+            onWin={winner => this.onWin(winner)}
+            onGameEvent={this.props.onGameEvent}
+            player1={world => this.getCommands(world, 1)}
+            player2={world => this.getCommands(world, 2)}
+          />
+        );
+      }
+      case 3: {
+        return (
+          <GemCollectorGame
+            gameId={this.props.gameMode.id}
+            showMode={showMode}
+            showScore={showScore}
+            onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
+            onWin={winner => this.onWin(winner)}
+            onGameEvent={this.props.onGameEvent}
+            player1={world => this.getPlayersCommands(world, 1)}
+            player2={world => this.getCommands(world, 2)}
+          />
+        );
+      }
+      default: {
+        return '';
+      }
+    }
+  };
+  initFunctionEditor = () => {
+    const { classes } = this.props;
+    const { updatedCode, timestamp, timing, showMode, scores, showScore, winner, playGame } = this.state;
+    return (
       <div>
         <h4>{'function getPlayersCommands(world, playerNum){'}</h4>
         <AceEditor
@@ -193,64 +271,7 @@ class PlayGame extends Component {
         </Button>
       </div>
     );
-    const gamePvsP = (
-      <Game
-        gameId={this.props.gameMode.id}
-        showMode={showMode}
-        showScore={showScore}
-        onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
-        onWin={winner => this.onWin(winner)}
-        onGameEvent={this.props.onGameEvent}
-      />
-    );
-    const gamePvsB = (
-      <Game
-        gameId={this.props.gameMode.id}
-        showMode={showMode}
-        showScore={showScore}
-        onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
-        onWin={winner => this.onWin(winner)}
-        onGameEvent={this.props.onGameEvent}
-        player2={world => this.getCommands(world, 2)}
-        config={{ speed: 10, minGems: 20, maxGems: 30, gatherToWin: 30 }}
-      />
-    );
-    const gameBvsB = (
-      <Game
-        gameId={this.props.gameMode.id}
-        showMode={showMode}
-        showScore={showScore}
-        onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
-        onWin={winner => this.onWin(winner)}
-        onGameEvent={this.props.onGameEvent}
-        player1={world => this.getCommands(world, 1)}
-        player2={world => this.getCommands(world, 2)}
-      />
-    );
-    const gameBvsCF = (
-      <Game
-        gameId={this.props.gameMode.id}
-        showMode={showMode}
-        showScore={showScore}
-        onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
-        onWin={winner => this.onWin(winner)}
-        onGameEvent={this.props.onGameEvent}
-        player1={world => this.getPlayersCommands(world, 1)}
-        player2={world => this.getCommands(world, 2)}
-      />
-    );
-    const gameId = this.props.gameMode.id;
-    return (
-      <div>
-        {header}
-        {gameId === 0 && gamePvsP}
-        {gameId === 1 && gamePvsB}
-        {gameId === 2 && gameBvsB}
-        {gameId === 3 && gameBvsCF}
-        {gameId === 3 && functionEditor}
-      </div>
-    );
-  }
+  };
 }
 
 PlayGame.propTypes = {

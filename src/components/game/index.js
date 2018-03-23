@@ -10,6 +10,8 @@ import SelectMode from './selectMode';
 import PlayGame from './playGame';
 import EventsTable from './eventsTable';
 
+import SquadGame from '../../modules/ALSET-Squad';
+
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
@@ -36,13 +38,6 @@ class Module extends Component {
   nextPage(stateKey = null, stateValue = null) {
     if (this.state.activePageNum < 3) {
       if (stateKey) {
-        // temparory
-        //console.log(stateKey, stateValue);
-        if (stateKey === 'gameType' && stateValue === 1) {
-          alert('Sorry ! Sqaud game is currently unavailable.');
-          return;
-        }
-
         this.setState({ [stateKey]: stateValue });
       }
       this.setState({ activePageNum: this.state.activePageNum + 1 });
@@ -62,16 +57,21 @@ class Module extends Component {
   }
   handleGameEvent(newEvent) {
     const events = this.state.events;
-    this.setState({ events: [...events, { ...newEvent, gameMode: this.state.gameMode, timeStamp: Date.now() }] });
+    this.setState({
+      events: [
+        ...events,
+        {
+          ...newEvent,
+          gameType: this.state.gameType,
+          gameMode: this.state.gameType === 0 ? this.state.gameMode : null,
+          timeStamp: Date.now(),
+        },
+      ],
+    });
   }
   render() {
     const { classes } = this.props;
-    const { activePageNum, gameMode, events } = this.state;
-    const selectGame = <SelectGame nextPage={(key, value) => this.nextPage(key, value)} />;
-    const editConfig = <EditConfig nextPage={(key, value) => this.nextPage(key, value)} />;
-    const selectMode = <SelectMode nextPage={(key, value) => this.nextPage(key, value)} />;
-    const playGame = <PlayGame gameMode={gameMode} onGameEvent={this.handleGameEvent} />;
-
+    const { activePageNum, gameType, gameMode, events } = this.state;
     const backButton = (
       <div>
         <Button variant="raised" className={classes.button} onClick={() => this.previousPage()}>
@@ -81,10 +81,7 @@ class Module extends Component {
     );
     return (
       <div>
-        {activePageNum === 0 && selectGame}
-        {activePageNum === 1 && editConfig}
-        {activePageNum === 2 && selectMode}
-        {activePageNum === 3 && playGame}
+        {this.getActivePage()}
         {activePageNum > 0 && backButton}
         <div style={{ marginTop: '100px' }}>
           <EventsTable events={events} />
@@ -92,6 +89,26 @@ class Module extends Component {
       </div>
     );
   }
+  getActivePage = () => {
+    const { activePageNum, gameType, gameMode, events } = this.state;
+    switch (activePageNum) {
+      case 0: {
+        return <SelectGame nextPage={(key, value) => this.nextPage(key, value)} />;
+      }
+      case 1: {
+        if (gameType === 0) {
+          return <EditConfig nextPage={(key, value) => this.nextPage(key, value)} />;
+        }
+        return <SquadGame />;
+      }
+      case 2: {
+        return <SelectMode nextPage={(key, value) => this.nextPage(key, value)} />;
+      }
+      case 3: {
+        return <PlayGame gameMode={gameMode} onGameEvent={this.handleGameEvent} />;
+      }
+    }
+  };
 }
 // Module.propTypes = {
 
