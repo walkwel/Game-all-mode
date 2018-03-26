@@ -12,8 +12,6 @@ import AceEditor from 'react-ace';
 import 'brace/mode/json';
 import 'brace/theme/github';
 
-import gameConfig from '../../gameConfig';
-
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -25,11 +23,11 @@ const styles = theme => ({
 });
 
 class EditConfig extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      config: gameConfig,
       errors: [],
+      config: props.selectedGame['editableConfig'],
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleValidation = this.handleValidation.bind(this);
@@ -50,11 +48,14 @@ class EditConfig extends Component {
     this.props.nextPage('gameConfig', this.state.config);
   }
   render() {
-    const { classes } = this.props;
-    const { config } = this.state;
+    const { classes, selectedGame } = this.props;
+    const config = JSON.stringify(this.state.config, null, '\t');
+
     return (
       <div className={classes.root}>
-        <Typography variant="display1">Edit Configuration</Typography>
+        <Typography variant="display1">
+          <b>{selectedGame.name} :</b> Edit Configuration
+        </Typography>
         <AceEditor
           mode="json"
           theme="github"

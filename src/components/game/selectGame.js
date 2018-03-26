@@ -33,29 +33,19 @@ class SelectGame extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes,allGamesConfig } = this.props;
     const { spacing } = this.state;
-    const gameTypes = [
-      {
-        id: 0,
-        name: 'Gem Collector',
-      },
-      {
-        id: 1,
-        name: 'Squad',
-      },
-    ];
     return (
       <div className={classes.root}>
         <Typography variant="display1">Select Game</Typography>
         <Grid container className={classes.root}>
           <Grid item xs={12}>
             <Grid container className={classes.demo} justify="center" spacing={Number(spacing)}>
-              {gameTypes.map(type => (
-                <Grid key={type.id} item onClick={() => this.props.nextPage('gameType', type.id)}>
+              {allGamesConfig.map(game => (
+                <Grid key={game.id} item onClick={() => this.props.nextPage('selectedGameId', game.id)}>
                   <Paper className={classes.paper}>
                     <Typography variant="headline" component="h3">
-                      {type.name}
+                      {game.name}
                     </Typography>
                   </Paper>
                 </Grid>

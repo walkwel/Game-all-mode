@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import allReucers from './reducers';
-import App from './components/App';
+import GamesContainer from './containers/GamesContainer';
 
 const store = createStore(allReucers);
 
@@ -11,7 +11,11 @@ class Module extends Component {
   render() {
     return (
       <Provider store={store}>
-        <App />
+        {this.props.type === 'bot' ? (
+          <GamesContainer script={this.props.script} />
+        ) : (
+          <GamesContainer type={this.props.type} />
+        )}
       </Provider>
     );
   }

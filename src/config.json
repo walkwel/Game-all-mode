@@ -1,20 +1,66 @@
 {
-  "gameModes": [
+  "games": [
     {
       "id": 0,
-      "name": "Player vs Player"
+      "name": "Gem Collector",
+      "editableConfig": {
+        "player1Keys": {
+          "left": 37,
+          "right": 39,
+          "up": 38,
+          "down": 40
+        },
+        "player2Keys": {
+          "left": 74,
+          "right": 76,
+          "up": 73,
+          "down": 75
+        }
+      },
+      "gameModes": [
+        {
+          "id": 0,
+          "name": "Player vs Player"
+        },
+        {
+          "id": 1,
+          "name": "Player vs Bot"
+        },
+        {
+          "id": 2,
+          "name": "Bot vs Bot"
+        },
+        {
+          "id": 3,
+          "name": "Bot vs Custom Code"
+        }
+      ]
     },
     {
       "id": 1,
-      "name": "Player vs Bot"
-    },
-    {
-      "id": 2,
-      "name": "Bot vs Bot"
-    },
-    {
-      "id": 3,
-      "name": "Bot vs Custom Code"
+      "name": "Squad",
+      "editableConfig": {
+        "player1Keys": {},
+        "player2Keys": {}
+      },
+      "gameModes": [
+        {
+          "id": 0,
+          "name": "Player vs Player"
+        },
+        {
+          "id": 1,
+          "name": "Player vs Bot"
+        },
+        {
+          "id": 2,
+          "name": "Bot vs Bot"
+        },
+        {
+          "id": 3,
+          "name": "Bot vs Custom Code"
+        }
+      ]
     }
   ]
 }

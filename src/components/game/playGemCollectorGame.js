@@ -7,7 +7,7 @@ import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 
-import GemCollectorGame from '../../modules/ALSET-game';
+import GemCollectorGame from '../../modules/ALSET-gem-collector';
 import Header from '../header';
 
 import CustomFunctionCode from '../../customCode';
@@ -35,7 +35,7 @@ const styles = theme => ({
   },
 });
 
-class PlayGame extends Component {
+class PlayGemCollectorGame extends Component {
   constructor() {
     super();
     this.state = {
@@ -155,18 +155,18 @@ class PlayGame extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, selectedGameMode } = this.props;
     const { updatedCode, timestamp, timing, showMode, scores, showScore, winner, playGame } = this.state;
     const header = (
       <Header
         scores={scores}
         toggleScore={() => this.toggleScore()}
         toggleMode={() => this.toggleMode()}
-        gameMode={this.props.gameMode}
+        gameMode={this.props.selectedGameMode}
       />
     );
 
-    const gameId = this.props.gameMode.id;
+    const gameId = selectedGameMode.id;
     return (
       <div>
         {header}
@@ -177,13 +177,13 @@ class PlayGame extends Component {
   }
 
   initGemCollector = gameId => {
-    const { classes } = this.props;
+    const { classes, selectedGameMode } = this.props;
     const { updatedCode, timestamp, timing, showMode, scores, showScore, winner, playGame } = this.state;
     switch (gameId) {
       case 0: {
         return (
           <GemCollectorGame
-            gameId={this.props.gameMode.id}
+            gameId={selectedGameMode.id}
             showMode={showMode}
             showScore={showScore}
             onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
@@ -195,7 +195,7 @@ class PlayGame extends Component {
       case 1: {
         return (
           <GemCollectorGame
-            gameId={this.props.gameMode.id}
+            gameId={selectedGameMode.id}
             showMode={showMode}
             showScore={showScore}
             onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
@@ -209,7 +209,7 @@ class PlayGame extends Component {
       case 2: {
         return (
           <GemCollectorGame
-            gameId={this.props.gameMode.id}
+            gameId={selectedGameMode.id}
             showMode={showMode}
             showScore={showScore}
             onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
@@ -223,7 +223,7 @@ class PlayGame extends Component {
       case 3: {
         return (
           <GemCollectorGame
-            gameId={this.props.gameMode.id}
+            gameId={selectedGameMode.id}
             showMode={showMode}
             showScore={showScore}
             onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
@@ -235,7 +235,16 @@ class PlayGame extends Component {
         );
       }
       default: {
-        return '';
+        return (
+          <GemCollectorGame
+            gameId={selectedGameMode.id}
+            showMode={showMode}
+            showScore={showScore}
+            onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
+            onWin={winner => this.onWin(winner)}
+            onGameEvent={this.props.onGameEvent}
+          />
+        );
       }
     }
   };
@@ -274,8 +283,8 @@ class PlayGame extends Component {
   };
 }
 
-PlayGame.propTypes = {
+PlayGemCollectorGame.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(PlayGame);
+export default withStyles(styles)(PlayGemCollectorGame);

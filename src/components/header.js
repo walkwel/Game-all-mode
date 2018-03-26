@@ -18,11 +18,13 @@ const styles = theme => ({
   },
   button: {
     margin: theme.spacing.unit,
+    float: 'left',
   },
   paper: theme.mixins.gutters({
     padding: '8px 0',
     margin: '0px 10px',
     borderRadius: '40px',
+    float: 'left',
   }),
 });
 
@@ -32,19 +34,35 @@ function Header(props) {
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Toolbar>
-          <Button variant="raised" color="primary" className={classes.button} onClick={() => toggleScore()}>
-            Toggle Score
-          </Button>
-          <Paper className={classes.paper} elevation={4}>
-            <Typography variant="headline" component="h3">
-              Player 1 : <span style={{ color: 'blue' }}>{scores.player1Score}</span>
-              <span style={{ color: 'gray', margin: '0px 10px' }}>{gameMode.name}</span>
-              Player 2 : <span style={{ color: 'blue' }}>{scores.player2Score}</span>
-            </Typography>
-          </Paper>
-          <Button variant="raised" color="primary" className={classes.button} onClick={() => toggleMode()}>
-            Toggle Mode
-          </Button>
+          <div style={{ margin: '0px auto', clear: 'both' }}>
+            {toggleScore ? (
+              <Button variant="raised" color="primary" className={classes.button} onClick={() => toggleScore()}>
+                Toggle Score
+              </Button>
+            ) : (
+              ''
+            )}
+            <Paper className={classes.paper} elevation={4}>
+              {scores ? (
+                <Typography variant="headline" component="h3">
+                  Player 1 : <span style={{ color: 'blue' }}>{scores.player1Score}</span>
+                  <span style={{ color: 'gray', margin: '0px 10px' }}>{gameMode.name}</span>
+                  Player 2 : <span style={{ color: 'blue' }}>{scores.player2Score}</span>
+                </Typography>
+              ) : (
+                <Typography variant="headline" component="h3">
+                  <span style={{ color: 'gray', margin: '0px 10px' }}>{gameMode.name}</span>
+                </Typography>
+              )}
+            </Paper>
+            {toggleMode ? (
+              <Button variant="raised" color="primary" className={classes.button} onClick={() => toggleMode()}>
+                Toggle Mode
+              </Button>
+            ) : (
+              ''
+            )}
+          </div>
         </Toolbar>
       </AppBar>
     </div>

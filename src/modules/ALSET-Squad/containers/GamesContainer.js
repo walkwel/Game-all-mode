@@ -51,14 +51,18 @@ class GamesContainer extends Component {
   }
   render() {
     const { classes } = this.props;
+    const isGameOver = '';
+    const restartButton = (
+      <Button variant="raised" color="primary" className={classes.button} onClick={() => this.props.restart()}>
+        Restart
+      </Button>
+    );
     return (
       <div style={{ width: '100%' }}>
         {this.props.type == 'player' && this.props.gamesData.playerScore >= gameJsonData.amountToWin ? (
           <div className={classes.container}>
             <h1 className={classes.title}>Player won!</h1>
-            <Button variant="raised" color="primary" className={classes.button} onClick={() => this.props.restart()}>
-              Restart
-            </Button>
+            {restartButton}
           </div>
         ) : (
           ''
@@ -66,14 +70,11 @@ class GamesContainer extends Component {
         {this.props.type == 'player' && this.props.gamesData.botScore >= gameJsonData.amountToWin ? (
           <div className={classes.container}>
             <h1 className={classes.title}>Player loose!</h1>
-            <Button variant="raised" color="primary" className={classes.button} onClick={() => this.props.restart()}>
-              Restart
-            </Button>
+            {restartButton}
           </div>
         ) : (
           ''
         )}
-        {}
 
         {this.props.type == 'player' && (
           <div>
@@ -86,9 +87,7 @@ class GamesContainer extends Component {
             >
               {this.props.gamesData.gameState == 'play' ? 'Pause' : 'Play'}
             </Button>
-            <Button variant="raised" color="primary" className={classes.button} onClick={() => this.props.restart()}>
-              Restart
-            </Button>
+            {restartButton}
           </div>
         )}
         <h1>

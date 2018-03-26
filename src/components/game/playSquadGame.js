@@ -1,17 +1,25 @@
 import React, { Component } from 'react';
-import GamesContainer from '../containers/GamesContainer';
+import PropTypes from 'prop-types';
 
-class App extends Component {
+import { withStyles } from 'material-ui/styles';
+
+import SquadGame from '../../modules/ALSET-Squad';
+import Header from '../header';
+
+const styles = theme => ({});
+
+class PlaySquadGame extends Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
+
   render() {
+    const { classes, selectedGameMode } = this.props;
     return (
       <div>
-        <GamesContainer type="player" />
-        <GamesContainer
-          script={world => {
-            return this.getCommands(world);
-          }}
-          type="bot"
-        />
+        <Header gameMode={selectedGameMode} />
+        {this.initSquad(selectedGameMode.id)}
       </div>
     );
   }
@@ -39,10 +47,35 @@ class App extends Component {
       } else if (closestGem.y - player.y < 0) {
         var direction = { left: false, right: false, up: true, down: false };
       }
-      //console.log(direction);
       return direction;
     }
   }
+  initSquad = gameMode => {
+    switch (gameMode) {
+      case 0: {
+        return <h2>This mode is under construction</h2>;
+      }
+      case 1: {
+        return <SquadGame type="player" />;
+      }
+      case 2: {
+        return (
+          <SquadGame
+            script={world => {
+              return this.getCommands(world);
+            }}
+            type="bot"
+          />
+        );
+      }
+      case 3: {
+        return <h2>This mode is under construction</h2>;
+      }
+      default: {
+        return <SquadGame />;
+      }
+    }
+  };
 }
 
-export default App;
+export default withStyles(styles)(PlaySquadGame);

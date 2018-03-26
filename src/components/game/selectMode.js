@@ -6,12 +6,11 @@ import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 
-import config from '../../config.json';
-
 const styles = theme => ({
   root: {
     flexGrow: 1,
     padding: '0px 10px',
+    marginTop: '20px',
   },
   paper: {
     textAlign: 'center',
@@ -35,17 +34,19 @@ class SelectMode extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, selectedGame } = this.props;
     const { spacing } = this.state;
-    const gameModes = config.gameModes;
+    const gameModes = selectedGame.gameModes;
     return (
       <div className={classes.root}>
-        <Typography variant="display1">Select Mode</Typography>
+        <Typography variant="display1">
+          <b>{selectedGame.name} :</b> Select Mode
+        </Typography>
         <Grid container className={classes.root}>
           <Grid item xs={12}>
             <Grid container className={classes.demo} justify="center" spacing={Number(spacing)}>
               {gameModes.map(mode => (
-                <Grid key={mode.id} item onClick={() => this.props.nextPage('gameMode', mode)}>
+                <Grid key={mode.id} item onClick={() => this.props.nextPage('selectedGameMode', mode)}>
                   <Paper className={classes.paper}>
                     <Typography variant="headline" component="h3">
                       {mode.name}

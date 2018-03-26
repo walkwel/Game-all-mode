@@ -3,37 +3,44 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
+import Divider from 'material-ui/Divider';
 
 import SelectGame from './selectGame';
 import EditConfig from './editConfig';
 import SelectMode from './selectMode';
-import PlayGame from './playGame';
+import PlayGemCollectorGame from './playGemCollectorGame';
+import PlaySquadGame from './playSquadGame';
 import EventsTable from './eventsTable';
 
-import SquadGame from '../../modules/ALSET-Squad';
+import allGamesConfig from '../../config.json';
 
 const styles = theme => ({
   button: {
-    margin: theme.spacing.unit,
+    margin: '5px',
+    float: 'left',
+  },
+  controls: {
+    margin: '20px 10px',
   },
 });
 
 class Module extends Component {
   constructor(props) {
-    super(props);
+    super();
     this.state = {
       activePageNum: 0,
-      gameType: 0,
-      gameMode: {
-        id: 0,
-        name: 'player-vs-player',
+      selectedGameId: 0,
+      selectedGameMode: {
+        id: null,
+        name: null,
       },
-      gameConfig: '',
+      selectedGameConfig: null,
       events: [],
     };
     this.nextPage = this.nextPage.bind(this);
     this.previousPage = this.previousPage.bind(this);
     this.handleGameEvent = this.handleGameEvent.bind(this);
+    this.endGame = this.endGame.bind(this);
   }
   nextPage(stateKey = null, stateValue = null) {
     if (this.state.activePageNum < 3) {
@@ -46,14 +53,26 @@ class Module extends Component {
   previousPage() {
     if (this.state.activePageNum > 0) {
       if (this.state.activePageNum === 3) {
-        this.setState({ activePageNum: 0 });
         this.handleGameEvent({
           type: 'end',
         });
-        return;
       }
       this.setState({ activePageNum: this.state.activePageNum - 1 });
     }
+  }
+  endGame() {
+    this.setState({
+      activePageNum: 0,
+      selectedGameId: 0,
+      selectedGameMode: {
+        id: null,
+        name: null,
+      },
+      selectedGameConfig: null,
+    });
+    this.handleGameEvent({
+      type: 'end',
+    });
   }
   handleGameEvent(newEvent) {
     const events = this.state.events;
@@ -62,8 +81,8 @@ class Module extends Component {
         ...events,
         {
           ...newEvent,
-          gameType: this.state.gameType,
-          gameMode: this.state.gameType === 0 ? this.state.gameMode : null,
+          selectedGameId: this.state.selectedGameId,
+          selectedGameMode: this.state.selectedGameMode,
           timeStamp: Date.now(),
         },
       ],
@@ -71,18 +90,22 @@ class Module extends Component {
   }
   render() {
     const { classes } = this.props;
-    const { activePageNum, gameType, gameMode, events } = this.state;
-    const backButton = (
-      <div>
+    const { activePageNum, selectedGameId, selectedGameMode, events } = this.state;
+    const controlButtons = (
+      <div className={classes.controls}>
+        <Divider />
         <Button variant="raised" className={classes.button} onClick={() => this.previousPage()}>
-          {activePageNum === 3 ? 'End' : 'Back'}
+          Back
+        </Button>
+        <Button variant="raised" color="secondary" className={classes.button} onClick={() => this.endGame()}>
+          End
         </Button>
       </div>
     );
     return (
       <div>
         {this.getActivePage()}
-        {activePageNum > 0 && backButton}
+        {activePageNum > 0 && controlButtons}
         <div style={{ marginTop: '100px' }}>
           <EventsTable events={events} />
         </div>
@@ -90,28 +113,40 @@ class Module extends Component {
     );
   }
   getActivePage = () => {
-    const { activePageNum, gameType, gameMode, events } = this.state;
+    const { activePageNum, selectedGameId, selectedGameMode, events } = this.state;
+    const selectedGame = allGamesConfig.games[selectedGameId];
     switch (activePageNum) {
       case 0: {
-        return <SelectGame nextPage={(key, value) => this.nextPage(key, value)} />;
+        return (
+          <SelectGame nextPage={(key, value) => this.nextPage(key, value)} allGamesConfig={allGamesConfig.games} />
+        );
       }
       case 1: {
-        if (gameType === 0) {
-          return <EditConfig nextPage={(key, value) => this.nextPage(key, value)} />;
-        }
-        return <SquadGame />;
+        return <EditConfig nextPage={(key, value) => this.nextPage(key, value)} selectedGame={selectedGame} />;
       }
       case 2: {
-        return <SelectMode nextPage={(key, value) => this.nextPage(key, value)} />;
+        return <SelectMode nextPage={(key, value) => this.nextPage(key, value)} selectedGame={selectedGame} />;
       }
       case 3: {
-        return <PlayGame gameMode={gameMode} onGameEvent={this.handleGameEvent} />;
+        if (selectedGameId === 0) {
+          return (
+            <PlayGemCollectorGame
+              selectedGameMode={selectedGameMode}
+              onGameEvent={this.handleGameEvent}
+              selectedGame={selectedGame}
+            />
+          );
+        }
+        return (
+          <PlaySquadGame
+            selectedGameMode={selectedGameMode}
+            onGameEvent={this.handleGameEvent}
+            selectedGame={selectedGame}
+          />
+        );
       }
     }
   };
 }
-// Module.propTypes = {
-
-// };
 
 export default withStyles(styles)(Module);
