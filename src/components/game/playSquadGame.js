@@ -56,7 +56,14 @@ class PlaySquadGame extends Component {
         return <h2>This mode is under construction</h2>;
       }
       case 1: {
-        return <SquadGame type="player" />;
+        return (
+          <SquadGame
+            type="player"
+            script={world => {
+              return this.getCommands(world);
+            }}
+          />
+        );
       }
       case 2: {
         return (

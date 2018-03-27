@@ -12,7 +12,7 @@ class Module extends Component {
     return (
       <Provider store={store}>
         {this.props.type === 'bot' ? (
-          <GamesContainer script={this.props.script} />
+          <GamesContainer script={this.props.script} type={this.props.type} />
         ) : (
           <GamesContainer type={this.props.type} />
         )}

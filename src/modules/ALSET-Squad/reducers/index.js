@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 import CommonGamesData from './common-games-data';
 import BotGamesData from './bot-games-data';
 import PlayerGamesData from './player-games-data';
@@ -8,12 +8,20 @@ import BotPositionsData from './bot-positions-data';
 import PlayerPositionsData from './player-positions-data';
 
 const allReducers = combineReducers({
-	gamesData: CommonGamesData,
-	botGames: BotGamesData,
-	playerGames: PlayerGamesData,
-	botCollectives: BotCollectivesData,
-	playerCollectives: PlayerCollectivesData,
-	playerPositions: PlayerPositionsData,
-	botPositions: BotPositionsData
+  gamesData: CommonGamesData,
+  botGames: BotGamesData,
+  playerGames: PlayerGamesData,
+  botCollectives: BotCollectivesData,
+  playerCollectives: PlayerCollectivesData,
+  playerPositions: PlayerPositionsData,
+  botPositions: BotPositionsData,
 });
+
+// const rootReducer = (state, action) => {
+//   if (action.type === 'END_GAME') {
+//     state = undefined;
+//   }
+//   return allReducers(state, action);
+// };
+
 export default allReducers;
