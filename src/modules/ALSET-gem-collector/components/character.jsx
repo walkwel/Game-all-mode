@@ -17,8 +17,8 @@ class Character extends Component {
   };
   constructor(props, context) {
     super(props);
-    this.x=0;
-    this.y=0;
+    this.x = 0;
+    this.y = 0;
     this.controlChractors = this.controlChractors.bind(this);
     this.update = this.update.bind(this);
     this.moveLeft = this.moveLeft.bind(this);
@@ -49,10 +49,10 @@ class Character extends Component {
     var y = this.props.store.characterPosition[this.props.index].y;
     if (this.props.keys && this.props.keys.status !== false) {
       var newState;
-      if (this.props.keys.isDown(this.props.keys.RIGHT) || this.props.keys.isDown(76)) newState = 11;
-      else if (this.props.keys.isDown(this.props.keys.LEFT) || this.props.keys.isDown(74)) newState = 9;
-      else if (this.props.keys.isDown(this.props.keys.UP) || this.props.keys.isDown(73)) newState = 8;
-      else if (this.props.keys.isDown(this.props.keys.DOWN) || this.props.keys.isDown(75)) newState = 10;
+      if (this.props.keys.isDown(this.props.keys.RIGHT)) newState = 11;
+      else if (this.props.keys.isDown(this.props.keys.LEFT)) newState = 9;
+      else if (this.props.keys.isDown(this.props.keys.UP)) newState = 8;
+      else if (this.props.keys.isDown(this.props.keys.DOWN)) newState = 10;
       if (newState) this.props.store.characterState[this.props.index] = newState;
     }
     this.setState((prevState, props) => {
@@ -120,18 +120,20 @@ class Character extends Component {
   componentWillUnmount() {
     Matter.Events.off(this.context.engine, 'afterUpdate', this.update);
   }
-  componentWillReceiveProps(){
+  componentWillReceiveProps() {
     this.controlChractors();
   }
   render() {
     this.controlChractors();
     return (
-      <div id={`character-${this.props.index}-${this.props.gameId}`}
-      style={{
-        position: 'absolute',
-        transform: `translate(${this.x * this.context.scale}px, ${this.y * this.context.scale}px) translateZ(0)`,
-        transformOrigin: 'top left',
-      }}>
+      <div
+        id={`character-${this.props.index}-${this.props.gameId}`}
+        style={{
+          position: 'absolute',
+          transform: `translate(${this.x * this.context.scale}px, ${this.y * this.context.scale}px) translateZ(0)`,
+          transformOrigin: 'top left',
+        }}
+      >
         <Body
           args={[
             this.props.store.characterPosition[this.props.index].x,

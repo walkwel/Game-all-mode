@@ -155,7 +155,7 @@ class PlayGemCollectorGame extends Component {
   }
 
   render() {
-    const { classes, selectedGameMode } = this.props;
+    const { classes, selectedGameMode, selectedGameConfig } = this.props;
     const { updatedCode, timestamp, timing, showMode, scores, showScore, winner, playGame } = this.state;
     const header = (
       <Header
@@ -177,7 +177,7 @@ class PlayGemCollectorGame extends Component {
   }
 
   initGemCollector = gameId => {
-    const { classes, selectedGameMode } = this.props;
+    const { classes, selectedGameMode, selectedGameConfig } = this.props;
     const { updatedCode, timestamp, timing, showMode, scores, showScore, winner, playGame } = this.state;
     switch (gameId) {
       case 0: {
@@ -186,6 +186,7 @@ class PlayGemCollectorGame extends Component {
             gameId={selectedGameMode.id}
             showMode={showMode}
             showScore={showScore}
+            gameConfig={selectedGameConfig}
             onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
             onWin={winner => this.onWin(winner)}
             onGameEvent={this.props.onGameEvent}
@@ -198,6 +199,8 @@ class PlayGemCollectorGame extends Component {
             gameId={selectedGameMode.id}
             showMode={showMode}
             showScore={showScore}
+            gameConfig={selectedGameConfig}
+            gameConfig={selectedGameConfig}
             onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
             onWin={winner => this.onWin(winner)}
             onGameEvent={this.props.onGameEvent}
@@ -212,6 +215,7 @@ class PlayGemCollectorGame extends Component {
             gameId={selectedGameMode.id}
             showMode={showMode}
             showScore={showScore}
+            gameConfig={selectedGameConfig}
             onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
             onWin={winner => this.onWin(winner)}
             onGameEvent={this.props.onGameEvent}
@@ -226,6 +230,7 @@ class PlayGemCollectorGame extends Component {
             gameId={selectedGameMode.id}
             showMode={showMode}
             showScore={showScore}
+            gameConfig={selectedGameConfig}
             onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
             onWin={winner => this.onWin(winner)}
             onGameEvent={this.props.onGameEvent}
@@ -240,6 +245,7 @@ class PlayGemCollectorGame extends Component {
             gameId={selectedGameMode.id}
             showMode={showMode}
             showScore={showScore}
+            gameConfig={selectedGameConfig}
             onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
             onWin={winner => this.onWin(winner)}
             onGameEvent={this.props.onGameEvent}

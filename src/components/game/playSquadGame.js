@@ -25,7 +25,7 @@ class PlaySquadGame extends Component {
   }
 
   initSquad = gameMode => {
-    return <SquadGame />;
+    return <SquadGame gameConfig={this.props.selectedGameConfig} />;
     // switch (gameMode) {
     //   case 0: {
     //     return <h2>This mode is under development</h2>;

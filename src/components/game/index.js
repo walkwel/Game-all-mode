@@ -40,7 +40,7 @@ class Module extends Component {
     this.nextPage = this.nextPage.bind(this);
     this.previousPage = this.previousPage.bind(this);
     this.handleGameEvent = this.handleGameEvent.bind(this);
-    this.endGame = this.endGame.bind(this);
+    this.resetGame = this.resetGame.bind(this);
   }
   nextPage(stateKey = null, stateValue = null) {
     if (this.state.activePageNum < 3) {
@@ -60,7 +60,7 @@ class Module extends Component {
       this.setState({ activePageNum: this.state.activePageNum - 1 });
     }
   }
-  endGame() {
+  resetGame() {
     this.setState({
       activePageNum: 0,
       selectedGameId: 0,
@@ -97,7 +97,7 @@ class Module extends Component {
         <Button variant="raised" className={classes.button} onClick={() => this.previousPage()}>
           Back
         </Button>
-        <Button variant="raised" color="secondary" className={classes.button} onClick={() => this.endGame()}>
+        <Button variant="raised" color="secondary" className={classes.button} onClick={() => this.resetGame()}>
           End
         </Button>
       </div>
@@ -113,7 +113,7 @@ class Module extends Component {
     );
   }
   getActivePage = () => {
-    const { activePageNum, selectedGameId, selectedGameMode, events } = this.state;
+    const { activePageNum, selectedGameId, selectedGameMode, selectedGameConfig, events } = this.state;
     const selectedGame = allGamesConfig.games[selectedGameId];
     switch (activePageNum) {
       case 0: {
@@ -134,6 +134,7 @@ class Module extends Component {
               selectedGameMode={selectedGameMode}
               onGameEvent={this.handleGameEvent}
               selectedGame={selectedGame}
+              selectedGameConfig={selectedGameConfig}
             />
           );
         }
@@ -142,6 +143,7 @@ class Module extends Component {
             selectedGameMode={selectedGameMode}
             onGameEvent={this.handleGameEvent}
             selectedGame={selectedGame}
+            selectedGameConfig={selectedGameConfig}
           />
         );
       }

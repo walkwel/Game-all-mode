@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Sprite } from 'react-game-kit';
 
-import charactersBlondeImg from '../../assets/characters//blonde.png';
+import charactersBlondeImg from '../../assets/characters/blonde.png';
 
 export default class Character1 extends Component {
   getAnimationState() {

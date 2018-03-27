@@ -40,8 +40,7 @@
       "id": 1,
       "name": "Squad",
       "editableConfig": {
-        "player1Keys": {},
-        "player2Keys": {}
+        "players": 2
       },
       "gameModes": [
         {

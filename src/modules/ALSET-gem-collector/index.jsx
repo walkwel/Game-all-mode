@@ -5,6 +5,7 @@ import Matter from 'matter-js';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 
+import config from './config.json';
 // components
 import Background from './components/background.jsx';
 import Character from './components/character.jsx';
@@ -29,44 +30,84 @@ import './style.css';
 class Game extends Component {
   constructor(props) {
     super(props);
-    let GameStore;
-    if (this.props.gameId === 0) GameStore = GameStore1;
-    else if (this.props.gameId === 1) GameStore = GameStore2;
-    else if (this.props.gameId === 2) GameStore = GameStore3;
-    else if (this.props.gameId === 3) GameStore = GameStore4;
-    if (props.player1) this.keyListener1 = { status: false };
-    else this.keyListener1 = new KeyListener();
-    if (props.player2) this.keyListener2 = { status: false };
-    else this.keyListener2 = new KeyListener();
+    switch (this.props.gameId) {
+      case 0: {
+        this.GameStore = GameStore1;
+        break;
+      }
+      case 1: {
+        this.GameStore = GameStore2;
+        break;
+      }
+      case 2: {
+        this.GameStore = GameStore3;
+        break;
+      }
+      case 3: {
+        this.GameStore = GameStore4;
+        break;
+      }
+    }
+    if (props.player1) {
+      this.keyListener1 = { status: false };
+    } else {
+      this.keyListener1 = new KeyListener();
+    }
+    if (props.player2) {
+      this.keyListener2 = { status: false };
+    } else {
+      this.keyListener2 = new KeyListener();
+    }
     this.updateHandler = this.updateHandler.bind(this);
   }
 
   componentDidMount() {
-    if (this.keyListener1 && this.keyListener1.status !== false)
+    const player1Keys = this.props.gameConfig.player1Keys;
+    if (this.keyListener1 && this.keyListener1.status !== false) {
+      this.keyListener1.LEFT = player1Keys.left || config.player1Keys.left;
+      this.keyListener1.RIGHT = player1Keys.right || config.player1Keys.right;
+      this.keyListener1.UP = player1Keys.up || config.player1Keys.up;
+      this.keyListener1.DOWN = player1Keys.down || config.player1Keys.down;
       this.keyListener1.subscribe([
         this.keyListener1.LEFT,
         this.keyListener1.RIGHT,
         this.keyListener1.UP,
         this.keyListener1.DOWN,
       ]);
-    if (this.keyListener2 && this.keyListener2.status !== false) this.keyListener2.subscribe([73, 74, 75, 76]);
+    }
+    const player2Keys = this.props.gameConfig.player2Keys;
+    if (this.keyListener2 && this.keyListener2.status !== false) {
+      this.keyListener2.LEFT = player2Keys.left || config.player2Keys.left;
+      this.keyListener2.RIGHT = player2Keys.right || config.player2Keys.right;
+      this.keyListener2.UP = player2Keys.up || config.player2Keys.up;
+      this.keyListener2.DOWN = player2Keys.down || config.player2Keys.down;
+      this.keyListener2.subscribe([
+        this.keyListener2.LEFT,
+        this.keyListener2.RIGHT,
+        this.keyListener2.UP,
+        this.keyListener2.DOWN,
+      ]);
+    }
     this.props.onGameEvent({
       type: 'ready',
     });
+    this.GameStore.score = [0, 0];
+    this.GameStore.mode = 'play';
   }
 
   componentWillUnmount() {
-    if (this.keyListener1 && this.keyListener1.LEFT) this.keyListener1.unsubscribe();
-    if (this.keyListener2 && this.keyListener2.LEFT) this.keyListener2.unsubscribe();
+    if (this.keyListener1 && this.keyListener1.LEFT) {
+      this.keyListener1.unsubscribe();
+    }
+    if (this.keyListener2 && this.keyListener2.LEFT) {
+      this.keyListener2.unsubscribe();
+    }
+    this.GameStore.score = [0, 0];
+    this.GameStore.mode = 'restart';
   }
   componentWillReceiveProps(nextProps) {}
   render() {
-    let GameStore;
-    if (this.props.gameId === 0) GameStore = GameStore1;
-    else if (this.props.gameId === 1) GameStore = GameStore2;
-    else if (this.props.gameId === 2) GameStore = GameStore3;
-    else if (this.props.gameId === 3) GameStore = GameStore4;
-    if (this.props.config) GameStore.config = this.props.config;
+    const GameStore = this.GameStore;
     const { showScore = true, showMode = true, onScoreUpdate, onWin } = this.props;
 
     return (
@@ -122,13 +163,9 @@ class Game extends Component {
   physicsInit(engine) {}
   colissionHandler(engine) {}
   updateHandler(engine) {
+    const GameStore = this.GameStore;
     let player1Direction;
     let player2Direction;
-    let GameStore;
-    if (this.props.gameId === 0) GameStore = GameStore1;
-    else if (this.props.gameId === 1) GameStore = GameStore2;
-    else if (this.props.gameId === 2) GameStore = GameStore3;
-    else if (this.props.gameId === 3) GameStore = GameStore4;
     if (GameStore.mode === 'pause') return;
     let WorldData = {
       players: GameStore.characterPosition,
@@ -151,6 +188,7 @@ class Game extends Component {
     GameStore.createNewStones();
   }
 }
+
 Game.propTypes = {
   showScore: PropTypes.bool.isRequired,
   showMode: PropTypes.bool.isRequired,

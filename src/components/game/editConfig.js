@@ -24,10 +24,10 @@ const styles = theme => ({
 
 class EditConfig extends Component {
   constructor(props) {
-    super(props);
+    super();
     this.state = {
       errors: [],
-      config: props.selectedGame['editableConfig'],
+      config: JSON.stringify(props.selectedGame['editableConfig'], null, '\t'),
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleValidation = this.handleValidation.bind(this);
@@ -45,11 +45,11 @@ class EditConfig extends Component {
       alert('Invalid Json');
       return;
     }
-    this.props.nextPage('gameConfig', this.state.config);
+    this.props.nextPage('selectedGameConfig', JSON.parse(this.state.config));
   }
   render() {
     const { classes, selectedGame } = this.props;
-    const config = JSON.stringify(this.state.config, null, '\t');
+    const { config } = this.state;
 
     return (
       <div className={classes.root}>

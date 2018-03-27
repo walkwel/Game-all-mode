@@ -11,7 +11,7 @@ class Module extends Component {
   render() {
     return (
       <Provider store={store}>
-        <App />
+        <App gameConfig={this.props.gameConfig} />
       </Provider>
     );
   }
