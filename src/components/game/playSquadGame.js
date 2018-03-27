@@ -25,23 +25,24 @@ class PlaySquadGame extends Component {
   }
 
   initSquad = gameMode => {
-    switch (gameMode) {
-      case 0: {
-        return <h2>This mode is under development</h2>;
-      }
-      case 1: {
-        return <SquadGame />;
-      }
-      case 2: {
-        return <h2>This mode is under development</h2>;
-      }
-      case 3: {
-        return <h2>This mode is under development</h2>;
-      }
-      default: {
-        return <h2>This mode is under development</h2>;
-      }
-    }
+    return <SquadGame />;
+    // switch (gameMode) {
+    //   case 0: {
+    //     return <h2>This mode is under development</h2>;
+    //   }
+    //   case 1: {
+    //     return <SquadGame />;
+    //   }
+    //   case 2: {
+    //     return <h2>This mode is under development</h2>;
+    //   }
+    //   case 3: {
+    //     return <h2>This mode is under development</h2>;
+    //   }
+    //   default: {
+    //     return <h2>This mode is under development</h2>;
+    //   }
+    // }
   };
 }
 

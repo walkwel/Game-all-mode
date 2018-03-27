@@ -45,20 +45,8 @@
       },
       "gameModes": [
         {
-          "id": 0,
-          "name": "Player vs Player"
-        },
-        {
           "id": 1,
           "name": "Player vs Bot"
-        },
-        {
-          "id": 2,
-          "name": "Bot vs Bot"
-        },
-        {
-          "id": 3,
-          "name": "Bot vs Custom Code"
         }
       ]
     }
