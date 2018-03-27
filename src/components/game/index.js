@@ -76,13 +76,14 @@ class Module extends Component {
   }
   handleGameEvent(newEvent) {
     const events = this.state.events;
+    const selectedGame = allGamesConfig.games[this.state.selectedGameId];
     this.setState({
       events: [
         ...events,
         {
           ...newEvent,
-          selectedGameId: this.state.selectedGameId,
-          selectedGameMode: this.state.selectedGameMode,
+          selectedGame: selectedGame,
+          gameMode: this.state.selectedGameMode,
           timeStamp: Date.now(),
         },
       ],

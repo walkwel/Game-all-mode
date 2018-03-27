@@ -47,7 +47,7 @@ class EventsTable extends Component {
                       <TableRow key={index}>
                         <TableCell numeric>{index + 1}</TableCell>
                         <TableCell>{event.type}</TableCell>
-                        <TableCell>{event.gameType === 0 ? 'Gem Collector' : 'Sqaud'}</TableCell>
+                        <TableCell>{event.selectedGame.name}</TableCell>
                         <TableCell>{event.gameMode ? event.gameMode.name : '__'}</TableCell>
                         <TableCell>{event.timeStamp}</TableCell>
                       </TableRow>
