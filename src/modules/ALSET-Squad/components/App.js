@@ -1,17 +1,105 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { fillPlayerData, fillBotData, changeGameState, restart, reset } from '../actions/index';
+import gameJsonData from '../config.json';
 import GamesContainer from '../containers/GamesContainer';
 
+import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
+
+const styles = theme => ({
+  button: {
+    margin: theme.spacing.unit,
+    float: 'left',
+  },
+  container: {
+    width: '100%',
+    height: '100px',
+  },
+  title: {
+    marginTop: '30px',
+    textAlign: 'center',
+  },
+});
+
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      currentPlayer: 0,
+    };
+    this.playPause = this.playPause.bind(this);
+  }
+  playPause() {
+    if (this.props.gamesData.gameState == 'play') this.props.changeGameState('pause');
+    else if (this.props.gamesData.gameState == 'pause') this.props.changeGameState('play');
+  }
+  componentWillMount() {
+    if (this.props.gamesData.playerScore >= gameJsonData.amountToWin) this.props.changeGameState('pause');
+  }
+  componentDidMount() {
+    gameJsonData.games.forEach((element, index) => {
+      if (element['same-as'] !== undefined) gameJsonData.games[index] = gameJsonData.games[element['same-as']];
+    });
+    this.props.fillPlayerData(gameJsonData.games);
+    this.props.fillBotData(gameJsonData.games);
+  }
+  componentWillUnmount() {
+    this.props.reset();
+  }
   render() {
+    const { classes, botGames, playerGames, gamesData } = this.props;
+    const isGameOver =
+      this.props.gamesData.playerScore >= gameJsonData.amountToWin ||
+      this.props.gamesData.botScore >= gameJsonData.amountToWin;
+    const restartButton = (
+      <Button variant="raised" color="primary" className={classes.button} onClick={() => this.props.restart()}>
+        Restart
+      </Button>
+    );
+    const playPauseButton = (
+      <Button
+        variant="raised"
+        className={classes.button}
+        onClick={() => {
+          this.playPause();
+        }}
+      >
+        {this.props.gamesData.gameState == 'play' ? 'Pause' : 'Play'}
+      </Button>
+    );
+
     return (
-      <div>
-        <GamesContainer type="player" />
-        <GamesContainer
-          script={world => {
-            return this.getCommands(world);
-          }}
-          type="bot"
-        />
+      <div style={{ width: '100%' }}>
+        <div>
+          {restartButton}
+          {!isGameOver && playPauseButton}
+        </div>
+        <div style={{ clear: 'both' }} />
+        {isGameOver ? (
+          <div className={classes.container}>
+            <h1 className={classes.title}>
+              {this.props.gamesData.playerScore >= gameJsonData.amountToWin ? 'Player Win' : 'Player Loose'}
+            </h1>
+          </div>
+        ) : (
+          <div style={{ minHeight: '400px' }}>
+            <div>
+              <GamesContainer type="player" botGames={botGames} playerGames={playerGames} gamesData={gamesData} />
+              <GamesContainer
+                type="bot"
+                botGames={botGames}
+                playerGames={playerGames}
+                gamesData={gamesData}
+                script={world => {
+                  return this.getCommands(world);
+                }}
+              />
+            </div>
+          </div>
+        )}
+        <div style={{ clear: 'both' }} />
       </div>
     );
   }
@@ -45,4 +133,27 @@ class App extends Component {
   }
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    botGames: state.botGames,
+    playerGames: state.playerGames,
+    gamesData: state.gamesData,
+  };
+}
+
+function matchDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      fillPlayerData: fillPlayerData,
+      fillBotData: fillBotData,
+      changeGameState: changeGameState,
+      restart: restart,
+      reset: reset,
+    },
+    dispatch,
+  );
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(withStyles(styles)(App));
+
+// export default App;
