@@ -1,7 +1,7 @@
 import React, { Componenet, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fillPlayerData, fillBotData, changeGameState, restart, reset } from '../actions/index';
+import { fillPlayerData, fillBotData, changeGameState, restart, reset } from '../store/actions/index';
 import gameJsonData from '../config.json';
 import Game from './Game';
 

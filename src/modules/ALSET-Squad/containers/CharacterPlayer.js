@@ -10,7 +10,7 @@ import {
   generatePlayerCollectives,
   removePlayerCollective,
   incrementPlayerScore,
-} from '../actions/index';
+} from '../store/actions/index';
 import { KeyListener } from 'react-game-kit';
 import Gnome1 from './Characters/Gnome1';
 import Blonde from './Characters/Blonde';

@@ -1,8 +1,7 @@
-import gameConfig from '../config.json';
-
+import gameConfig from '../../config.json';
 export default function(state = null, action) {
   switch (action.type) {
-    case 'MOVE_PLAYER': {
+    case 'MOVE_BOT': {
       if (state == null) state = [];
       const character = gameConfig.games[action.payload.gameIndex].character;
       if (!state[action.payload.gameIndex]) {
@@ -49,11 +48,11 @@ export default function(state = null, action) {
       }
       return state;
     }
-    case 'UPDATE_PLAYER_DIRECTION': {
+    case 'UPDATE_BOT_DIRECTION': {
       state[action.payload.gameIndex].direction = action.payload.direction;
       return state;
     }
-    case 'UPDATE_PLAYER_SPEED': {
+    case 'UPDATE_BOT_SPEED': {
       state[action.payload.gameIndex].speed = action.payload.speed;
       return state;
     }
@@ -66,7 +65,7 @@ export default function(state = null, action) {
         state[i] = {
           x: character2.startingPoint.x,
           y: character2.startingPoint.y,
-          direction: 'right',
+          direction: 'down',
           speed: character2.speed,
         };
       }

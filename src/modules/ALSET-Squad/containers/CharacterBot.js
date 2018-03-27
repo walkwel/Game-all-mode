@@ -9,7 +9,7 @@ import {
   generateBotCollectives,
   removeBotCollective,
   incrementBotScore,
-} from '../actions/index';
+} from '../store/actions/index';
 import gameJsonData from '../config.json';
 import Gnome1 from './Characters/Gnome1';
 import Blonde from './Characters/Blonde';

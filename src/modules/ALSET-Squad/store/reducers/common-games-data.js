@@ -1,4 +1,4 @@
-import gameConfig from '../config.json';
+import gameConfig from '../../config.json';
 const defaultState = {
   currentPlayer: 0,
   botScore: 0,

@@ -1,11 +1,11 @@
-import gameConfig from '../config.json';
+import gameConfig from '../../config.json';
 const defaultState = [];
 
 export default function(state = defaultState, action) {
   const data = action.payload;
   const collectedData = gameConfig.collectedObjects;
   switch (action.type) {
-    case 'GENERATE_PLAYER_COLLECTIVES': {
+    case 'GENERATE_BOT_COLLECTIVES': {
       if (!state[data.gameIndex]) state[data.gameIndex] = [];
       if (state[data.gameIndex].length > 0) return state;
       var stonesQuant = Math.floor(
@@ -23,11 +23,12 @@ export default function(state = defaultState, action) {
       state = [...state];
       return state;
     }
-    case 'REMOVE_PLAYER_COLLECTIVE': {
-      state[data.gameIndex].splice(data.collectiveIndex, 1);
-      state = [...state];
+    case 'REMOVE_BOT_COLLECTIVE':
+      {
+        state[data.gameIndex].splice(data.collectiveIndex, 1);
+        state = [...state];
+      }
       return state;
-    }
     case 'RESET': {
       return defaultState;
     }
