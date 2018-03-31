@@ -139,24 +139,17 @@ class Index extends Component {
             />
           );
         }
-        else if(selectedGameId === 1){
+        else{
         return (
-          <PlaySquadGame
-            selectedGameMode={selectedGameMode}
-            onGameEvent={this.handleGameEvent}
-            selectedGame={selectedGame}
-            selectedGameConfig={selectedGameConfig}
-          />
-        );
-      }
-      return (
-        <PlayEditableSquadGame
+          <PlayEditableSquadGame
         selectedGameMode={selectedGameMode}
         onGameEvent={this.handleGameEvent}
         selectedGame={selectedGame}
         selectedGameConfig={selectedGameConfig}
       />
-      )
+        );
+      }
+
       }
     }
   };
