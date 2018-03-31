@@ -36,9 +36,9 @@ class GamesContainer extends Component {
           {gameScore}
           {this.props.playerGames.map((game, index) => {
             if (this.props.type === 'player') {
-              return <Game key={index} index={index} type={this.props.type} gameData={game} />;
+              return <Game key={index} index={index} type={this.props.type} gameData={game} onGameEvent={this.props.onGameEvent} />;
             }
-            return <Game script={this.props.script} key={index} index={index} type={this.props.type} gameData={game} />;
+            return <Game script={this.props.script} key={index} index={index} type={this.props.type} gameData={game} onGameEvent={this.props.onGameEvent} />;
           })}
         </div>
         <div style={{ clear: 'both' }} />

@@ -48,6 +48,19 @@
           "name": "Player vs Bot"
         }
       ]
+    },
+    {
+      "id": 2,
+      "name": "Editable Squad Game",
+      "editableConfig": {
+        "players": 2
+      },
+      "gameModes": [
+        {
+          "id": 0,
+          "name": "Player vs Bot"
+        }
+      ]
     }
   ]
 }

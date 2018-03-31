@@ -25,7 +25,7 @@ class EventsTable extends Component {
   render() {
     const { classes, events } = this.props;
     return (
-      <div>
+      <div style={{maxHeight:'400px',overflowY:'scroll'}}>
         {events.length > 0 && (
           <div>
             <Divider />

@@ -30,10 +30,21 @@ class App extends Component {
       currentPlayer: 0,
     };
     this.playPause = this.playPause.bind(this);
+    this.playerStatus=''
   }
   playPause() {
-    if (this.props.gamesData.gameState == 'play') this.props.changeGameState('pause');
-    else if (this.props.gamesData.gameState == 'pause') this.props.changeGameState('play');
+    if (this.props.gamesData.gameState == 'play'){
+      this.props.changeGameState('pause');
+      this.props.onGameEvent({
+        type : 'pause'
+      })
+    }
+    else if (this.props.gamesData.gameState == 'pause') {
+      this.props.changeGameState('play');
+      this.props.onGameEvent({
+        type : 'play'
+      })
+    }
   }
   componentWillMount() {
     if (this.props.gamesData.playerScore >= gameJsonData.amountToWin) this.props.changeGameState('pause');
@@ -48,13 +59,30 @@ class App extends Component {
   componentWillUnmount() {
     this.props.reset();
   }
+  componentWillReceiveProps(nextProps){
+    // console.log('prev',this.props.gamesData);
+    // console.log('next',nextProps.gamesData);
+    // console.log('++++++++++++++')
+    // if(
+    //   prevProps.gamesData.playerScore!=nextProps.gamesData.playerScore ||
+    //   prevProps.gamesData.botScore!= nextProps.gamesData.botScore
+    // ){
+    //   console.log('dafas');
+    //   const isGameOver =
+    //   prevProps.gamesData.playerScore >= gameJsonData.amountToWin ||
+    //   prevProps.gamesData.botScore >= gameJsonData.amountToWin;
+    //   if(isGameOver){
+    //     console.log('over');
+    //   }
+   // }
+  }
   render() {
     const { classes, botGames, playerGames, gamesData } = this.props;
     const isGameOver =
       this.props.gamesData.playerScore >= gameJsonData.amountToWin ||
       this.props.gamesData.botScore >= gameJsonData.amountToWin;
     const restartButton = (
-      <Button variant="raised" color="primary" className={classes.button} onClick={() => this.props.restart()}>
+      <Button variant="raised" color="primary" className={classes.button} onClick={() =>{this.props.onGameEvent({type:'restart'}); this.props.restart();}}>
         Restart
       </Button>
     );
@@ -80,13 +108,13 @@ class App extends Component {
         {isGameOver ? (
           <div className={classes.container}>
             <h1 className={classes.title}>
-              {this.props.gamesData.playerScore >= gameJsonData.amountToWin ? 'Player Win' : 'Player Loose'}
+            {this.props.gamesData.playerScore >= gameJsonData.amountToWin ? 'Player Win' : 'Player Loose'}
             </h1>
           </div>
         ) : (
           <div style={{ minHeight: '400px' }}>
             <div>
-              <GamesContainer type="player" botGames={botGames} playerGames={playerGames} gamesData={gamesData} />
+              <GamesContainer type="player" botGames={botGames} playerGames={playerGames} gamesData={gamesData}  onGameEvent={this.props.onGameEvent} />
               <GamesContainer
                 type="bot"
                 botGames={botGames}
@@ -95,6 +123,7 @@ class App extends Component {
                 script={world => {
                   return this.getCommands(world);
                 }}
+                onGameEvent={this.props.onGameEvent}
               />
             </div>
           </div>

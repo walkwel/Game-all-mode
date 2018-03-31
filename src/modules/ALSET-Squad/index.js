@@ -7,14 +7,14 @@ import App from './components/App';
 
 const store = createStore(allReucers);
 
-class Module extends Component {
+class Index extends Component {
   render() {
     return (
       <Provider store={store}>
-        <App gameConfig={this.props.gameConfig} />
+        <App gameConfig={this.props.gameConfig}   onGameEvent={this.props.onGameEvent}/>
       </Provider>
     );
   }
 }
 
-export default Module;
+export default Index;

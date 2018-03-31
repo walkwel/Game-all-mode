@@ -46,7 +46,7 @@ class PlayGemCollectorGame extends Component {
       errors: [],
       showMode: true,
       showScore: true,
-      scores: { player1Score: 0, player2Score: 0 },
+      scores: [ 0,  0 ],
       winner: null,
       playGame: null,
     };
@@ -56,7 +56,7 @@ class PlayGemCollectorGame extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleValidation = this.handleValidation.bind(this);
 
-    this.onScoreUpdate = this.onScoreUpdate.bind(this);
+    this.handleGameEvents = this.handleGameEvents.bind(this);
     this.onWin = this.onWin.bind(this);
     // this.onPlay = this.onPlay.bind(this);
     // this.onPause = this.onPause.bind(this);
@@ -64,15 +64,18 @@ class PlayGemCollectorGame extends Component {
     this.toggleMode = this.toggleMode.bind(this);
   }
 
-  onScoreUpdate(playerScores) {
-    if (
-      playerScores.player1Score === this.state.scores.player1Score &&
-      playerScores.player2Score === this.state.scores.player2Score
-    ) {
-      return;
+  handleGameEvents(event) {
+    if(event.type==='score_update'){
+      if (
+        event.scores[0] != this.state.scores[0] ||
+        event.scores[1] != this.state.scores[1]
+      ) {
+        this.setState({ scores: event.scores });
+      }   
     }
-    console.log('geting name & score', playerScores);
-    this.setState({ scores: playerScores });
+  
+    this.props.onGameEvent(event);
+
   }
   onWin(winner) {
     console.log('Winner..', winner);
@@ -187,9 +190,8 @@ class PlayGemCollectorGame extends Component {
             showMode={showMode}
             showScore={showScore}
             gameConfig={selectedGameConfig}
-            onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
             onWin={winner => this.onWin(winner)}
-            onGameEvent={this.props.onGameEvent}
+            onGameEvent={this.props.handleGameEvents}
           />
         );
       }
@@ -201,9 +203,8 @@ class PlayGemCollectorGame extends Component {
             showScore={showScore}
             gameConfig={selectedGameConfig}
             gameConfig={selectedGameConfig}
-            onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
             onWin={winner => this.onWin(winner)}
-            onGameEvent={this.props.onGameEvent}
+            onGameEvent={this.handleGameEvents}
             player2={world => this.getCommands(world, 2)}
             config={{ speed: 10, minGems: 20, maxGems: 30, gatherToWin: 30 }}
           />
@@ -216,9 +217,8 @@ class PlayGemCollectorGame extends Component {
             showMode={showMode}
             showScore={showScore}
             gameConfig={selectedGameConfig}
-            onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
             onWin={winner => this.onWin(winner)}
-            onGameEvent={this.props.onGameEvent}
+            onGameEvent={this.handleGameEvents}
             player1={world => this.getCommands(world, 1)}
             player2={world => this.getCommands(world, 2)}
           />
@@ -231,9 +231,8 @@ class PlayGemCollectorGame extends Component {
             showMode={showMode}
             showScore={showScore}
             gameConfig={selectedGameConfig}
-            onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
             onWin={winner => this.onWin(winner)}
-            onGameEvent={this.props.onGameEvent}
+            onGameEvent={this.handleGameEvents}
             player1={world => this.getPlayersCommands(world, 1)}
             player2={world => this.getCommands(world, 2)}
           />
@@ -246,9 +245,8 @@ class PlayGemCollectorGame extends Component {
             showMode={showMode}
             showScore={showScore}
             gameConfig={selectedGameConfig}
-            onScoreUpdate={playerScores => this.onScoreUpdate(playerScores)}
             onWin={winner => this.onWin(winner)}
-            onGameEvent={this.props.onGameEvent}
+            onGameEvent={this.handleGameEvents}
           />
         );
       }

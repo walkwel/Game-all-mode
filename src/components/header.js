@@ -45,9 +45,9 @@ function Header(props) {
             <Paper className={classes.paper} elevation={4}>
               {scores ? (
                 <Typography variant="headline" component="h3">
-                  Player 1 : <span style={{ color: 'blue' }}>{scores.player1Score}</span>
+                  Player 1 : <span style={{ color: 'blue' }}>{scores[0]}</span>
                   <span style={{ color: 'gray', margin: '0px 10px' }}>{gameMode.name}</span>
-                  Player 2 : <span style={{ color: 'blue' }}>{scores.player2Score}</span>
+                  Player 2 : <span style={{ color: 'blue' }}>{scores[1]}</span>
                 </Typography>
               ) : (
                 <Typography variant="headline" component="h3">

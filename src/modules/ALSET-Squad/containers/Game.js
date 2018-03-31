@@ -52,6 +52,7 @@ class Game extends Component {
                 character={this.props.gameData.character}
                 gameIndex={this.props.index}
                 gameType={this.props.type}
+                onGameEvent={this.props.onGameEvent}
               />
             ) : (
               <CharacterBot
@@ -59,6 +60,7 @@ class Game extends Component {
                 character={this.props.gameData.character}
                 gameIndex={this.props.index}
                 gameType={this.props.type}
+                onGameEvent={this.props.onGameEvent}
               />
             )}
             <Collectives

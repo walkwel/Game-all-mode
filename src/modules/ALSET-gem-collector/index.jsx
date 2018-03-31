@@ -108,7 +108,7 @@ class Game extends Component {
   componentWillReceiveProps(nextProps) {}
   render() {
     const GameStore = this.GameStore;
-    const { showScore = true, showMode = true, onScoreUpdate, onWin } = this.props;
+    const { showScore = true, showMode = true, onWin } = this.props;
 
     return (
       <div style={{ height: '60vh', width: '100%' }}>
@@ -150,7 +150,6 @@ class Game extends Component {
               <Controls store={GameStore} onGameEvent={this.props.onGameEvent} />
               <WinLoseScreen
                 store={GameStore}
-                onScoreUpdate={playerScores => onScoreUpdate(playerScores)}
                 onWin={winner => onWin(winner)}
                 onGameEvent={this.props.onGameEvent}
               />

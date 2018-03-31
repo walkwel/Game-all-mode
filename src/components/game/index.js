@@ -10,8 +10,8 @@ import EditConfig from './editConfig';
 import SelectMode from './selectMode';
 import PlayGemCollectorGame from './playGemCollectorGame';
 import PlaySquadGame from './playSquadGame';
+import PlayEditableSquadGame from './editableSquadGame'
 import EventsTable from './eventsTable';
-
 import allGamesConfig from '../../config.json';
 
 const styles = theme => ({
@@ -24,7 +24,7 @@ const styles = theme => ({
   },
 });
 
-class Module extends Component {
+class Index extends Component {
   constructor(props) {
     super();
     this.state = {
@@ -139,6 +139,7 @@ class Module extends Component {
             />
           );
         }
+        else if(selectedGameId === 1){
         return (
           <PlaySquadGame
             selectedGameMode={selectedGameMode}
@@ -148,8 +149,17 @@ class Module extends Component {
           />
         );
       }
+      return (
+        <PlayEditableSquadGame
+        selectedGameMode={selectedGameMode}
+        onGameEvent={this.handleGameEvent}
+        selectedGame={selectedGame}
+        selectedGameConfig={selectedGameConfig}
+      />
+      )
+      }
     }
   };
 }
 
-export default withStyles(styles)(Module);
+export default withStyles(styles)(Index);

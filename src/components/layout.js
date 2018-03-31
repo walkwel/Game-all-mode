@@ -12,7 +12,7 @@ import MenuIcon from 'material-ui-icons/Menu';
 
 import Game from './game';
 
-const drawerWidth = 240;
+const drawerWidth = 0;
 
 const styles = theme => ({
   root: {
@@ -87,7 +87,6 @@ class Layout extends React.Component {
               onClick={this.handleDrawerToggle}
               className={classes.navIconHide}
             >
-              <MenuIcon />
             </IconButton>
             <Typography variant="title" color="inherit" noWrap>
               ALSET Game
@@ -107,19 +106,17 @@ class Layout extends React.Component {
               keepMounted: true, // Better open performance on mobile.
             }}
           >
-            {drawer}
           </Drawer>
         </Hidden>
         <Hidden smDown implementation="css">
-          <Drawer
+          {/* <Drawer
             variant="permanent"
             open
             classes={{
               paper: classes.drawerPaper,
             }}
           >
-            {drawer}
-          </Drawer>
+          </Drawer> */}
         </Hidden>
         <main className={classes.content}>
           <div className={classes.toolbar}>
