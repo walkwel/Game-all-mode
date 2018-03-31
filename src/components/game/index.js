@@ -9,7 +9,6 @@ import SelectGame from './selectGame';
 import EditConfig from './editConfig';
 import SelectMode from './selectMode';
 import PlayGemCollectorGame from './playGemCollectorGame';
-import PlaySquadGame from './playSquadGame';
 import PlayEditableSquadGame from './editableSquadGame'
 import EventsTable from './eventsTable';
 import allGamesConfig from '../../config.json';
