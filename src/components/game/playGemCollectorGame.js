@@ -183,8 +183,8 @@ class PlayGemCollectorGame extends Component {
             showMode={showMode}
             showScore={showScore}
             gameConfig={selectedGameConfig}
+            onGameEvent={this.handleGameEvents}
             onWin={winner => this.onWin(winner)}
-            onGameEvent={this.props.handleGameEvents}
           />
         );
       }
