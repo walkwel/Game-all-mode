@@ -9,6 +9,7 @@ import Controls from './controls';
 import CodeEditor from './code-editor';
 import Store from '../../store/squad';
 import { observer } from 'mobx-react';
+import Util from '../../utils/index';
 
 class SquadGame extends Component {
     componentDidMount(){
@@ -45,6 +46,7 @@ class SquadGame extends Component {
     }
 
     render(){
+        var getCommands = Util.getCommands;
         return <div style={this.getWrapperStyles()}>
             <Loop>
                 <Controls
@@ -89,7 +91,7 @@ class SquadGame extends Component {
                         gameId={0}
                         charId={0}
                         type={this.props.gameData.config.game1.character1.type}
-                        getCommands={this.props.getCommands}
+                        getCommands={getCommands}
                         showCodeEditor={this.props.gameData.showCodeEditor}
                         player1Function={this.props.player1Function}
                         onError={this.props.onError}
@@ -101,7 +103,7 @@ class SquadGame extends Component {
                         gameId={0}
                         charId={1}
                         type={this.props.gameData.config.game1.character2.type}
-                        getCommands={this.props.getCommands}
+                        getCommands={getCommands}
                         showCodeEditor={this.props.gameData.showCodeEditor}
                         player1Function={this.props.player1Function}
                         onError={this.props.onError}
@@ -144,7 +146,7 @@ class SquadGame extends Component {
                         gameId={1}
                         charId={0}
                         type={this.props.gameData.config.game2.character1.type}
-                        getCommands={this.props.getCommands}
+                        getCommands={getCommands}
                         showCodeEditor={this.props.gameData.showCodeEditor}
                         player2Function={this.props.player2Function}
                         onError={this.props.onError}
@@ -157,14 +159,13 @@ class SquadGame extends Component {
                         gameId={1}
                         charId={1}
                         type={this.props.gameData.config.game2.character2.type}
-                        getCommands={this.props.getCommands}
+                        getCommands={getCommands}
                         showCodeEditor={this.props.gameData.showCodeEditor}
                         player2Function={this.props.player2Function}
                         onError={this.props.onError}
                         onGameEvent={this.props.onGameEvent}
                     />}
                 </Stage></div>
-                {this.props.gameData.showCodeEditor?<CodeEditor/>:""}
             </Loop>
 
         </div>

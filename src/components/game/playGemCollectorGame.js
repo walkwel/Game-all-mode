@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import { withStyles } from 'material-ui/styles';
-import Grid from 'material-ui/Grid';
-import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
-
 import GemCollectorGame from '../../modules/ALSET-gem-collector';
 import Header from '../header';
-
 import CustomFunctionCode from '../../customCode';
-
 import brace from 'brace';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';

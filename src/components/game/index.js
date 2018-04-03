@@ -12,6 +12,7 @@ import PlayGemCollectorGame from './playGemCollectorGame';
 import PlayEditableSquadGame from './editableSquadGame'
 import EventsTable from './eventsTable';
 import allGamesConfig from '../../config.json';
+import CodeEditor from '../../modules/ALSET-EditableSquadGame/games/squadGame/code-editor'
 
 const styles = theme => ({
   button: {
@@ -107,7 +108,7 @@ class Index extends Component {
         {this.getActivePage()}
         {activePageNum > 0 && controlButtons}
         <div style={{ marginTop: '100px' }}>
-          <EventsTable events={events} />
+          { activePageNum === 0 && <EventsTable events={events} /> }
         </div>
       </div>
     );

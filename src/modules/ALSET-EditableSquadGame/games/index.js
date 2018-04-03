@@ -8,6 +8,7 @@ import SquadGame from './squadGame/index';
 import SquadDefaultConfig from '../defaultConfigs/squadConfig.json';
 import SinglePlayerTwoWindowsDefaultConfig from '../defaultConfigs/singlePlayerTwoWindowsConfig.json';
 import gemCollectorDefaultConfig from '../defaultConfigs/gemCollectorConfig.json';
+import CodeEditor from '../games/squadGame/code-editor'
 
 class ALSETReactGame extends Component{
     constructor(props){
@@ -50,7 +51,9 @@ class ALSETReactGame extends Component{
                     gameData={gameData}
                 />*/
             default:
-                return <SquadGame
+                return (
+                <div>
+                <SquadGame
                     onPlay={this.props.onPlay}
                     onPause={this.props.onPause}
                     onEnd={this.props.onEnd}
@@ -62,6 +65,9 @@ class ALSETReactGame extends Component{
                     getCommands={getCommands}
                     onGameEvent={this.props.onGameEvent}
                 />
+                {this.props.showCodeEditor?<CodeEditor/>:""}
+                </div>
+                )
         }
     }
     getGameData(gameType){

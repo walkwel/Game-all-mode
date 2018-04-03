@@ -42,8 +42,8 @@ class PlayEditableSquadGame extends Component {
   }
 
   initSquad = gameMode => {
-    return <EditableSquadGame gameConfig={this.props.selectedGameConfig}  onGameEvent={this.handleGameEvents}  />;
-  };
+    return <EditableSquadGame gameConfig={this.props.selectedGameConfig}  onGameEvent={this.handleGameEvents} showCodeEditor= {true} />;
+  };  
 }
 
 export default withStyles(styles)(PlayEditableSquadGame);
