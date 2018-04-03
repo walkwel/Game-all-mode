@@ -100,7 +100,8 @@ class Controls extends Component {
                     background: "#7eca84",
                     width:"100%",
                     height:"100%",
-                    zIndex:2
+                    zIndex:2,
+                    top:"-1px"
                 }}>
                <h1 style={{
                    marginTop:"30%",
