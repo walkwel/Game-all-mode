@@ -18,7 +18,6 @@ class WinLoseScreen extends Component {
     this.checkScore = this.checkScore.bind(this);
     this.update = this.update.bind(this);
     this.gatherToWin = this.props.store.config.gatherToWin;
-    this.scores=[0,0];
   }
 
   update() {
@@ -36,14 +35,6 @@ class WinLoseScreen extends Component {
   }
 
   checkScore() {
-    if(this.scores[0]===this.props.store.score[0] && this.scores[1]===this.props.store.score[1]){
-      return false;
-    }
-    this.props.onGameEvent({
-      type: 'score_update',
-      scores : [this.props.store.score[0],this.props.store.score[1]]
-    });
-    this.scores= [this.props.store.score[0],this.props.store.score[1]];
     if (this.props.store.score[0] >= this.gatherToWin) {
       this.winText = 'Player 1 Wins!!!';
       this.props.onWin({ winner: 0 });

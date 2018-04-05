@@ -129,7 +129,6 @@ class Game extends Component {
                 keys={this.keyListener1}
                 store={GameStore}
                 imgSrc={CharacterBlonde}
-                key={0}
                 index={0}
                 gameId={this.props.gameId}
               />
@@ -137,12 +136,16 @@ class Game extends Component {
                 keys={this.keyListener2}
                 store={GameStore}
                 imgSrc={CharacterBrunette}
-                key={1}
                 index={1}
                 gameId={this.props.gameId}
               />
               {GameStore.stonesData.map((stone, index) => {
-                return <Stone store={GameStore} gameId={this.props.gameId} key={index} index={index} />;
+                return <Stone 
+                store={GameStore} 
+                gameId={this.props.gameId} 
+                index={index} 
+                onGameEvent={this.props.onGameEvent}
+                />;
               })}
               {showScore && <Score store={GameStore} left={'0'} right={'none'} playerId={0} />}
               {showScore && <Score store={GameStore} left={'none'} right={'0'} playerId={1} />}

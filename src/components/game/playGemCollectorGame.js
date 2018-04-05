@@ -71,7 +71,7 @@ class PlayGemCollectorGame extends Component {
 
   }
   onWin(winner) {
-    console.log('Winner..', winner);
+    // console.log('Winner..', winner);
     // this.setState({winner : winner});
   }
 
@@ -133,8 +133,7 @@ class PlayGemCollectorGame extends Component {
   }
   updateCustomCode() {
     if (this.state.errors.length > 0) {
-      console.log(this.state.errors);
-      alert('Invalid code,please correct thr code');
+      alert('Invalid code,please correct the code');
       return;
     }
     this.props.onGameEvent({
@@ -194,7 +193,6 @@ class PlayGemCollectorGame extends Component {
             gameId={selectedGameMode.id}
             showMode={showMode}
             showScore={showScore}
-            gameConfig={selectedGameConfig}
             gameConfig={selectedGameConfig}
             onWin={winner => this.onWin(winner)}
             onGameEvent={this.handleGameEvents}
