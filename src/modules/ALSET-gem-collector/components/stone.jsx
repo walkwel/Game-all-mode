@@ -27,14 +27,14 @@ export default class Stone extends Component {
       if (this.props.store.rect2Rect(gem, player1)) {
         this.props.onGameEvent({
           type: 'score_update',
-          scores : [this.props.store.score[0],this.props.store.score[1]]
+          scores : [this.props.store.score[0]+1,this.props.store.score[1]]
         });
     this.scores= [this.props.store.score[0],this.props.store.score[1]];
         this.props.store.removeHittenGem(this.props.index, 0);
       } else if (this.props.store.rect2Rect(gem, player2)) {
         this.props.onGameEvent({
           type: 'score_update',
-          scores : [this.props.store.score[0],this.props.store.score[1]]
+          scores : [this.props.store.score[0],this.props.store.score[1]+1]
         });
         this.props.store.removeHittenGem(this.props.index, 1);
       }

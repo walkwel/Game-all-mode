@@ -59,14 +59,11 @@ class PlayGemCollectorGame extends Component {
 
   handleGameEvents(event) {
     if(event.type==='score_update'){
-      if (
-        event.scores[0] != this.state.scores[0] ||
-        event.scores[1] != this.state.scores[1]
-      ) {
         this.setState({ scores: event.scores });
-      }   
     }
-  
+    if(event.type==='restart'){
+      this.setState({ scores: [0,0] });
+    }
     this.props.onGameEvent(event);
 
   }

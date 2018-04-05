@@ -23,15 +23,7 @@ class ALSETReactGame extends Component{
         switch(selectedGameMode.id){
             case 0:
                 return <SquadGame
-                onPlay={this.props.onPlay}
-                onPause={this.props.onPause}
-                onEnd={this.props.onEnd}
-                onError={this.props.onError}
-                onStateChange={this.props.onStateChange}
-                player1Function={this.props.player1Function}
-                player2Function={this.props.player2Function}
                 gameData={gameData}
-                showCodeEditor= {false} 
                 getCommands={getCommands}
                 onGameEvent={this.props.onGameEvent}
                 />
@@ -39,13 +31,6 @@ class ALSETReactGame extends Component{
                 return (
                 <div>
                 <SquadGame
-                    onPlay={this.props.onPlay}
-                    onPause={this.props.onPause}
-                    onEnd={this.props.onEnd}
-                    onError={this.props.onError}
-                    onStateChange={this.props.onStateChange}
-                    player1Function={this.props.player1Function}
-                    player2Function={this.props.player2Function}
                     gameData={gameData}
                     getCommands={getCommands}
                     onGameEvent={this.props.onGameEvent}
