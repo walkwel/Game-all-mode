@@ -8,10 +8,8 @@ import Obstacle from './obstacle';
 import Controls from './controls';
 import CodeEditor from './code-editor';
 import Store from '../../store/squad';
-import { observer } from 'mobx-react';
-import Util from '../../utils/index';
 
-class SquadGame extends Component {
+export default class SquadGame extends Component {
     componentDidMount(){
         //console.log(document.getElementById("codeEditor").value);
         if(document.getElementById("codeEditor"))
@@ -44,13 +42,12 @@ class SquadGame extends Component {
             background: '#3a9bdc'
         };
     }
-
     render(){
-        var getCommands = Util.getCommands;
+        console.log(this.props.gameData)
         return <div style={this.getWrapperStyles()}>
             <Loop>
                 <Controls
-                    onGameEvent={this.props.onGameEvent}
+                     onGameEvent={this.props.onGameEvent}
                 />
                 <div id={"game0"} style={this.getGameWrapperStyles()}><Stage style={this.getGameStyles()}>
                     <Tile tiles={this.props.gameData.config.game1.tiles}/>
@@ -88,7 +85,7 @@ class SquadGame extends Component {
                         gameId={0}
                         charId={0}
                         type={this.props.gameData.config.game1.character1.type}
-                        getCommands={getCommands}
+                        getCommands={this.props.getCommands}
                         showCodeEditor={this.props.gameData.showCodeEditor}
                         player1Function={this.props.player1Function}
                         onError={this.props.onError}
@@ -100,7 +97,7 @@ class SquadGame extends Component {
                         gameId={0}
                         charId={1}
                         type={this.props.gameData.config.game1.character2.type}
-                        getCommands={getCommands}
+                        getCommands={this.props.getCommands}
                         showCodeEditor={this.props.gameData.showCodeEditor}
                         player1Function={this.props.player1Function}
                         onError={this.props.onError}
@@ -143,12 +140,11 @@ class SquadGame extends Component {
                         gameId={1}
                         charId={0}
                         type={this.props.gameData.config.game2.character1.type}
-                        getCommands={getCommands}
+                        getCommands={this.props.getCommands}
                         showCodeEditor={this.props.gameData.showCodeEditor}
                         player2Function={this.props.player2Function}
                         onError={this.props.onError}
                         onGameEvent={this.props.onGameEvent}
-                       
                     />}
                     {(this.props.gameData.player=="player1"&&this.props.gameData.mode=="player-vs-bot"
                     ||this.props.gameData.mode=="bot-vs-bot")&&
@@ -156,16 +152,16 @@ class SquadGame extends Component {
                         gameId={1}
                         charId={1}
                         type={this.props.gameData.config.game2.character2.type}
-                        getCommands={getCommands}
+                        getCommands={this.props.getCommands}
                         showCodeEditor={this.props.gameData.showCodeEditor}
                         player2Function={this.props.player2Function}
                         onError={this.props.onError}
                         onGameEvent={this.props.onGameEvent}
                     />}
                 </Stage></div>
+                {this.props.gameData.showCodeEditor?<CodeEditor/>:""}
             </Loop>
 
         </div>
     }
 }
-export default observer(SquadGame);

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
-import Store from '../../store/squad';
+import Store from '../../store/gemCollector';
 import { observer } from 'mobx-react';
 import Button from 'material-ui/Button';
 import Grid from 'material-ui/Grid';
@@ -31,6 +31,10 @@ class Controls extends Component {
     loop(){
         if(Store.time==0&&Store.mode!="restart"&&Store.mode!="pause"){
             Store.mode="pause";
+            if(this.props.onEnd){
+                var player = Store.score[0]>Store.score[1]?"player1":"player2";
+                this.props.onEnd(player);
+            }
         }
     }
     startCountDown(){
@@ -42,15 +46,15 @@ class Controls extends Component {
     pauseResumeGame(){
         if(Store.mode=='pause'){
             Store.mode='play';
-                this.props.onGameEvent({
-                    type : "play"
-                })
+            this.props.onGameEvent({
+                type : "play"
+            })
         }
         else{
             Store.mode='pause';
-                this.props.onGameEvent({
-                    type : "pause"
-                })
+            this.props.onGameEvent({
+                type : "pause"
+            })
         }
     }
 
@@ -82,10 +86,10 @@ class Controls extends Component {
 	render() {
         const { classes } = this.props;
        return <div>
-<div className={classes.root}>
+           <div className={classes.root}>
       <Grid container spacing={24} style={{marginTop:'12px'}}>
         <Grid item xs={12}>
-        {Store.time==0&&<div style={{
+           {Store.time==0&&<div style={{
                     position:"absolute",
                     background: "#7eca84",
                     width:"100%",
@@ -98,7 +102,7 @@ class Controls extends Component {
                    textAlign:"center",
                    color:"#fff"
                }}>{Store.score[0]>Store.score[1]?"Player 1 Win!!!":"Player 2 Win!!!"}</h1>
-               <Button variant="raised" color="primary" onClick={()=>this.restartGame()}
+               <Button variant="raised" onClick={()=>this.restartGame()}
                     style={{
                         width: "30%",
                         marginLeft: "35%",
@@ -117,11 +121,10 @@ class Controls extends Component {
            <h3 style={{position:"fixed", left:"45%", top:0}}>Time left: {Store.time}</h3>
            <Button variant="raised" color="primary" style={{position:"fixed", left:0, top:0, zIndex:1}} onClick={()=>this.restartGame()}>Restart</Button>
            <Button variant="raised" color="default" style={{position:"fixed", left:"100px", top:0, zIndex:1}} onClick={()=>this.pauseResumeGame()}>{Store.mode == "play"?"Pause":"Resume"}</Button>
-        </Grid>
-      </Grid>
-    </div>
+           </Grid>
+         </Grid>
+        </div>
        </div>
     }
 }
-
 export default withStyles(styles)(observer(Controls));

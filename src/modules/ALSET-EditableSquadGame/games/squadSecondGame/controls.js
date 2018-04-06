@@ -31,6 +31,10 @@ class Controls extends Component {
     loop(){
         if(Store.time==0&&Store.mode!="restart"&&Store.mode!="pause"){
             Store.mode="pause";
+            if(this.props.onEnd){
+                var player = Store.score[0]>Store.score[1]?"player1":"player2";
+                this.props.onEnd(player);
+            }
         }
     }
     startCountDown(){
@@ -42,15 +46,15 @@ class Controls extends Component {
     pauseResumeGame(){
         if(Store.mode=='pause'){
             Store.mode='play';
-                this.props.onGameEvent({
-                    type : "play"
-                })
+            this.props.onGameEvent({
+                type : "play"
+            })
         }
         else{
             Store.mode='pause';
-                this.props.onGameEvent({
-                    type : "pause"
-                })
+            this.props.onGameEvent({
+                type : "pause"
+            })
         }
     }
 
@@ -82,10 +86,10 @@ class Controls extends Component {
 	render() {
         const { classes } = this.props;
        return <div>
-<div className={classes.root}>
+           <div className={classes.root}>
       <Grid container spacing={24} style={{marginTop:'12px'}}>
         <Grid item xs={12}>
-        {Store.time==0&&<div style={{
+           {Store.time==0&&<div style={{
                     position:"absolute",
                     background: "#7eca84",
                     width:"100%",
@@ -98,7 +102,7 @@ class Controls extends Component {
                    textAlign:"center",
                    color:"#fff"
                }}>{Store.score[0]>Store.score[1]?"Player 1 Win!!!":"Player 2 Win!!!"}</h1>
-               <Button variant="raised" color="primary" onClick={()=>this.restartGame()}
+               <Button variant="raised" color="primary"  onClick={()=>this.restartGame()}
                     style={{
                         width: "30%",
                         marginLeft: "35%",
@@ -120,8 +124,7 @@ class Controls extends Component {
         </Grid>
       </Grid>
     </div>
-       </div>
+    </div>
     }
 }
-
 export default withStyles(styles)(observer(Controls));

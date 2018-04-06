@@ -50,6 +50,18 @@
         },
         {
           "id": 1,
+          "name": "Single Player"
+        },
+        {
+          "id": 2,
+          "name": "Single Player Two Windows"
+        },
+        {
+          "id": 3,
+          "name": "Squad"
+        },
+        {
+          "id": 4,
           "name": "Bot vs Custom Code"
         }
       ]
